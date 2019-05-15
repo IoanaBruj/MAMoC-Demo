@@ -1,10 +1,6 @@
-# MAMoC-Android
+# MAMoC-Android-Demo-Apps
 
-This is a mobile computation offloading framework that offloads the compute-intensive tasks in mobile devices to more powerful
-surrogates (nearby Android devices, edge devices or public cloud servers). 
-
-
-## Demo Apps
+This demo uses the [MAMoC Android Offloading Framework](https://github.com/dawand/MAMoC-Android). If you want to setup the server components, please visit [MAMoC-Server](https://github.com/dawand/MAMoC-Server) repository.
 
 ### Text Search
 
