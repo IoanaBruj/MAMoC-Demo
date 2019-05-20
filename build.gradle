@@ -18,9 +18,9 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven {
-            url  "https://dl.bintray.com/dawand/mamoc_client"
-        }
+//        maven {
+//            url  "https://dl.bintray.com/dawand/mamoc_client"
+//        }
     }
 }
 
