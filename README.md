@@ -21,14 +21,14 @@ The activity class: [SearchActivity.java](app/src/main/java/uk/ac/standrews/cs/m
 ### Quick Sort
 QuickSort is a Divide and Conquer algorithm. It picks an element as pivot and partitions the given array around the picked pivot.
 
-The offloadable class: [Quicksort.java](app/src/main/java/uk/ac/standrews/cs/mamoc_demo/Sorting/Quicksort.java)
+The offloadable class: [Quicksort.java](app/src/main/java/uk/ac/standrews/cs/mamoc_demo/Sorting/QuickSort.java)
 The activity class: [SortingActivity.java](app/src/main/java/uk/ac/standrews/cs/mamoc_demo/Sorting/SortingActivity.java)
 
 ### NQueens
 The eight queens puzzle is the problem of placing eight chess queens on an 8×8 chessboard so that no two queens threaten each other.
 
 The offloadable class: [Queens.java](app/src/main/java/uk/ac/standrews/cs/mamoc_demo/NQueens/Queens.java)
-The activity class: [SearchActivity.java](app/src/main/java/uk/ac/standrews/cs/mamoc_demo//NQueens/NQueensActivity.java)
+The activity class: [NQueensActivity.java](app/src/main/java/uk/ac/standrews/cs/mamoc_demo//NQueens/NQueensActivity.java)
 
 ## Developing Android Applications with MAMoC Offloading Support
 Let's start with a simple Android/Java class `PrimeCounter.java` that counts the number of prime numbers between one and a given number `n`:
