@@ -7,19 +7,28 @@ This demo uses the [MAMoC Android Offloading Framework](https://github.com/dawan
 The demo applications show three representative use case offloading tasks:
 
 <p align="center">
-<img src="images/searching_demo.png" width="160">
-<img src="images/sorting_demo.png" width="160">
-<img src="images/nqueens_demo.png" width="160">
+<img src="images/searching_demo.png" width="180">
+<img src="images/sorting_demo.png" width="180">
+<img src="images/nqueens_demo.png" width="180"> 
 </p>
 
 ### Text Search
-This allows a user to enter a keyword and select a file size from (small, medium, and large) to find the occurrences of the word in the file. [Knuth-Morris-Pratt](https://www.nayuki.io/page/knuth-morris-pratt-string-matching) string searching algorithm is used. 
+This allows a user to enter a keyword and select a file size from (small, medium, and large) to find the occurrences of the keyword in the selected file. [Knuth-Morris-Pratt](https://www.nayuki.io/page/knuth-morris-pratt-string-matching) string searching algorithm is used. 
+
+The offloadable class: [KMP.java](app/src/main/java/uk/ac/standrews/cs/mamoc_demo/SearchText/KMP.java)
+The activity class: [SearchActivity.java](app/src/main/java/uk/ac/standrews/cs/mamoc_demo/SearchText/SearchActivity.java)
 
 ### Quick Sort
 QuickSort is a Divide and Conquer algorithm. It picks an element as pivot and partitions the given array around the picked pivot.
 
+The offloadable class: [Quicksort.java](app/src/main/java/uk/ac/standrews/cs/mamoc_demo/Sorting/Quicksort.java)
+The activity class: [SortingActivity.java](app/src/main/java/uk/ac/standrews/cs/mamoc_demo/Sorting/SortingActivity.java)
+
 ### NQueens
 The eight queens puzzle is the problem of placing eight chess queens on an 8×8 chessboard so that no two queens threaten each other.
+
+The offloadable class: [Queens.java](app/src/main/java/uk/ac/standrews/cs/mamoc_demo/NQueens/Queens.java)
+The activity class: [SearchActivity.java](app/src/main/java/uk/ac/standrews/cs/mamoc_demo//NQueens/NQueensActivity.java)
 
 ## Developing Android Applications with MAMoC Offloading Support
 Let's start with a simple Android/Java class `PrimeCounter.java` that counts the number of prime numbers between one and a given number `n`:
