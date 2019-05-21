@@ -120,7 +120,16 @@ In order to make the above class compatible with MAMoC offloading library, you n
     long n = 100000;
     mamocFramework.execute(ExecutionLocation.DYNAMIC, taskName, n);
     ```
-* You can create more sophisicated activites with all the offloading scenario options. Have a look at [`SearchActivity.java`](app/src/main/java/uk/ac/standrews/cs/mamoc_demo/SearchText/SearchActivity.java) in this repo. Note that we have added a superclass [`DemoBaseActivity.java`](app/src/main/java/uk/ac/standrews/cs/mamoc_demo/SearchText/DemoBaseActivity.java) to include the common methods used by the activities of all the three demo apps.
+* You can create more sophisicated activites with all the offloading scenario options. Have a look at [`SearchActivity.java`](app/src/main/java/uk/ac/standrews/cs/mamoc_demo/SearchText/SearchActivity.java) in this repo. Note that we have added a superclass [`DemoBaseActivity.java`](app/src/main/java/uk/ac/standrews/cs/mamoc_demo/DemoBaseActivity.java) to include the common methods used by the activities of all the three demo apps.
 
 ## Understanding Execution Location in MAMoC framework
-TBC
+
+1. LOCAL
+
+2. NEARBY
+
+3. EDGE
+
+4. PUBLIC_CLOUD
+
+5. DYNAMIC

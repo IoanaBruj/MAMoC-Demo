@@ -1,1 +1,2 @@
 include ':app'
+include ':mamoc_client' // only include this in development mode

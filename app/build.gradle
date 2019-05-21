@@ -42,5 +42,16 @@ dependencies {
     //ClassIndex for Annotation indexing
     implementation 'org.atteo.classindex:classindex:3.4'
 
-    implementation 'uk.ac.standrews.cs:mamoc_client:0.1'
+    /*
+    * You can include the MAMoC client library from JCenter if you only need to develop a task
+    * offloading app.
+    * */
+//    implementation 'uk.ac.standrews.cs:mamoc_client:0.14'
+
+    /*
+    * We have included the offloading library source code for you to edit the functionality
+    * of the offloading decision engine or execution controller. You can comment this out if you
+    * include the library from JCenter
+    * */
+    implementation project(':mamoc_client')
 }
