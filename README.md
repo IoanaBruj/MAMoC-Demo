@@ -71,7 +71,7 @@ In order to make the above class compatible with MAMoC offloading library, you n
 * Include the [MAMoC client](https://bintray.com/dawand/mamoc_client) in the *build.gradle* file of your Android module:
   ```gradle
   dependencies {
-        implementation 'uk.ac.standrews.cs:mamoc_client:0.1'
+        implementation 'uk.ac.standrews.cs:mamoc_client:0.14'
   }
   ```
 * Next, perform the following steps:
