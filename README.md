@@ -63,14 +63,15 @@ public class PrimeCounter {
 ```
 
 Design assumptions for the offloadable classes:
-1. The class contains a constructor that receives any necessary parameters from the caller classes.
+1. The class contains a constructor that receives the required parameters from the caller classes.
 2. The class contains a `run` method of either a return or a non-return type.
+3. The `run` method does not depend on any native features of the mobile device and does not call any Android system library methods.
 
 In order to make the above class compatible with MAMoC offloading library, you need to follow the steps below:
 * Include the [MAMoC client](https://bintray.com/dawand/mamoc_client) in the *build.gradle* file of your Android module:
   ```gradle
   dependencies {
-        implementation 'uk.ac.standrews.cs:mamoc_client:0.1'
+        implementation 'uk.ac.standrews.cs:mamoc_client:0.14'
   }
   ```
 * Next, perform the following steps:
@@ -133,3 +134,5 @@ In order to make the above class compatible with MAMoC offloading library, you n
 4. PUBLIC_CLOUD
 
 5. DYNAMIC
+
+TBD
