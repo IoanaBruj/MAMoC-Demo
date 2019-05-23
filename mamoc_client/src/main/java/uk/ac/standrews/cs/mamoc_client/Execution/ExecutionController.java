@@ -171,6 +171,7 @@ public class ExecutionController {
         if (!edgeNodes.isEmpty()) {
             EdgeNode node = edgeNodes.first(); // for now we assume we are connected to one edge device
 //            task.setRttSpeed(framework.networkProfiler.measureRtt(node.getIp(), node.getPort()));
+//            Log.d(TAG, "RTT SPEED TO EDGE: " + framework.networkProfiler.measureRtt(node.getIp(), node.getPort()));
             runRemotely(context, node, task_name, resource_name, params);
         } else {
             Toast.makeText(context, "No edge node exists", Toast.LENGTH_SHORT).show();
