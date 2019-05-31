@@ -5,8 +5,8 @@ import uk.ac.standrews.cs.mamoc_client.Annotation.Offloadable;
 @Offloadable
 public class QuickSort {
 
-    String content;
-    String[] strArr;
+    private String content;
+    private String[] strArr;
 
     private static final String BLANK_SPACE=" ";
 

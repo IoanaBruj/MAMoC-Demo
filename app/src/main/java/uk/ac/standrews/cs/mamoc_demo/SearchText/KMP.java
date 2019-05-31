@@ -5,7 +5,7 @@ import uk.ac.standrews.cs.mamoc_client.Annotation.Offloadable;
 @Offloadable(resourceDependent = true, parallelizable = true)
 public class KMP {
 
-    String content, pattern;
+    private String content, pattern;
 
     public KMP(String content, String pattern) {
         this.content = content;

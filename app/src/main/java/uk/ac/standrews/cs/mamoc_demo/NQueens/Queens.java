@@ -5,7 +5,7 @@ import uk.ac.standrews.cs.mamoc_client.Annotation.Offloadable;
 @Offloadable
 public class Queens {
 
-    int n;
+    private int n;
 
     public Queens(int N){
         this.n = N;
