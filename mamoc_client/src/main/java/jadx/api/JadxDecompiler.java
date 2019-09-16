@@ -178,50 +178,50 @@ public final class JadxDecompiler {
 		return executor;
 	}
 
-	public CompletableFuture<String> getSourceCode(String fileName) {
-		return runSourceCodeService(fileName);
-	}
-
-	private CompletableFuture<String> runSourceCodeService(String fileName) {
-		if (root == null) {
-			throw new JadxRuntimeException("No loaded files");
-		}
-		int threadsCount = args.getThreadsCount();
-		LOG.debug("processing threads count: {}", threadsCount);
-
-		LOG.info("processing source code service ...");
-		ExecutorService executor = Executors.newFixedThreadPool(threadsCount);
-
-		final CompletableFuture<String> result = CompletableFuture.supplyAsync(() -> {
-			for (final JavaClass cls : getClasses()) {
-
-				Log.d("name: ", cls.getFullName());
-
-				if (cls.getFullName().startsWith("uk")) { // cls.getFullName().equals(fileName)
-					LOG.info("getting code for ", cls.getFullName());
-					cls.decompile();
-					String code = cls.getCode();
-
-					try {
-						executor.shutdown();
-						executor.awaitTermination(1, TimeUnit.DAYS);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-
-					LOG.info("returning code: " + code);
-					return code;
-
-				} else {
-					LOG.info("skipping", cls.getFullName());
-				}
-			}
-
-			return null;
-		}, executor);
-
-		return result;
-	}
+//	public CompletableFuture<String> getSourceCode(String fileName) {
+//		return runSourceCodeService(fileName);
+//	}
+//
+//	private CompletableFuture<String> runSourceCodeService(String fileName) {
+//		if (root == null) {
+//			throw new JadxRuntimeException("No loaded files");
+//		}
+//		int threadsCount = args.getThreadsCount();
+//		LOG.debug("processing threads count: {}", threadsCount);
+//
+//		LOG.info("processing source code service ...");
+//		ExecutorService executor = Executors.newFixedThreadPool(threadsCount);
+//
+//		final CompletableFuture<String> result = CompletableFuture.supplyAsync(() -> {
+//			for (final JavaClass cls : getClasses()) {
+//
+//				Log.d("name: ", cls.getFullName());
+//
+//				if (cls.getFullName().startsWith("uk")) { // cls.getFullName().equals(fileName)
+//					LOG.info("getting code for ", cls.getFullName());
+//					cls.decompile();
+//					String code = cls.getCode();
+//
+//					try {
+//						executor.shutdown();
+//						executor.awaitTermination(1, TimeUnit.DAYS);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//
+//					LOG.info("returning code: " + code);
+//					return code;
+//
+//				} else {
+//					LOG.info("skipping", cls.getFullName());
+//				}
+//			}
+//
+//			return null;
+//		}, executor);
+//
+//		return result;
+//	}
 
 	public List<JavaClass> getClasses() {
 		if (root == null) {
