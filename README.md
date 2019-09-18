@@ -1,6 +1,15 @@
 # MAMoC-Android-Demo-Apps
 This demo uses the [MAMoC Android Offloading Framework](https://github.com/dawand/MAMoC-Android). If you want to setup the server components, please visit [MAMoC-Server](https://github.com/dawand/MAMoC-Server) repository.
 
+## Citation
+If you use this offloading library in your work, don't forget to cite the following paper please:
+```
+D. Sulaiman and A. Barker, "MAMoC-Android: Multisite Adaptive Computation Offloading for Android Applications,"
+2019 7th IEEE International Conference on Mobile Cloud Computing, Services, and Engineering (MobileCloud), Newark, CA, USA, 2019, pp. 68-75.
+```
+[Link to the paper](http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8710699&isnumber=8710648)
+
+
 ## Installing and Testing the Demo Apps
 
 ### Description of the Demo Apps
