@@ -7,7 +7,7 @@ If you use this offloading library in your work, don't forget to cite the follow
 D. Sulaiman and A. Barker, "MAMoC-Android: Multisite Adaptive Computation Offloading for Android Applications,"
 2019 7th IEEE International Conference on Mobile Cloud Computing, Services, and Engineering (MobileCloud), Newark, CA, USA, 2019, pp. 68-75.
 ```
-[Link to the paper](http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8710699&isnumber=8710648)
+[Link to the paper](https://ieeexplore.ieee.org/document/8710699)
 
 
 ## Installing and Testing the Demo Apps
