@@ -1,8 +1,10 @@
 package uk.ac.standrews.cs.mamoc_client;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 
 import org.atteo.classindex.ClassIndex;
@@ -10,6 +12,7 @@ import org.atteo.classindex.ClassIndex;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.UUID;
 
 import uk.ac.standrews.cs.mamoc_client.Annotation.Offloadable;
 import uk.ac.standrews.cs.mamoc_client.Communication.CommunicationController;
@@ -191,6 +194,15 @@ public class MamocFramework {
     }
 
     public MobileNode getSelfNode(){
+        selfNode = new MobileNode(mContext);
+
+//      String deviceID = Settings.Secure.getString(mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        String deviceID = UUID.randomUUID().toString();
+
+        selfNode.setDeviceID(deviceID);
+        selfNode.setIp(Utils.getIPAddress(true));
+
         return selfNode;
     }
 }

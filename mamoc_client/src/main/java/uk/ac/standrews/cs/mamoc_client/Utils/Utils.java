@@ -103,7 +103,7 @@ public class Utils {
     }
 
     public static boolean isWifiConnected(Context context) {
-            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
             return (cm != null) && (cm.getActiveNetworkInfo() != null) &&
                     (cm.getActiveNetworkInfo().getType() == 1);
@@ -112,11 +112,7 @@ public class Utils {
     public static boolean checkPermission(String strPermission, Context _c) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int result = ContextCompat.checkSelfPermission(_c, strPermission);
-            if (result == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            } else {
-                return false;
-            }
+            return result == PackageManager.PERMISSION_GRANTED;
         } else {
             return true;
         }

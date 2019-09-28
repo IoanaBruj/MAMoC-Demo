@@ -42,8 +42,8 @@ public class DiscoveryActivity extends AppCompatActivity {
 
     private final String TAG = "DiscoveryActivity";
     private MamocFramework framework;
-    EdgeNode edge;
-    CloudNode cloud;
+    private EdgeNode edge;
+    private CloudNode cloud;
 
     private Button discoverButton, edgeBtn, cloudBtn;
 
@@ -70,7 +70,7 @@ public class DiscoveryActivity extends AppCompatActivity {
         listeningPort = findViewById(R.id.ListenPort);
 
         discoverButton = findViewById(R.id.discoverBtn);
-        discoverButton.setOnClickListener(View -> startNSD());
+        discoverButton.setOnClickListener(View -> startWiFiP2PActivity());
 
         edgeBtn = findViewById(R.id.edgeConnect);
         edgeTextView = findViewById(R.id.edgeTextView);
@@ -260,9 +260,9 @@ public class DiscoveryActivity extends AppCompatActivity {
         }
     }
 
-    private void startNSD(){
+    private void startWiFiP2PActivity(){
         if (Utils.isWifiConnected(this)){
-            Intent nsdIntent = new Intent(DiscoveryActivity.this, NSD_Activity.class);
+            Intent nsdIntent = new Intent(DiscoveryActivity.this, WiFiP2PSDActivity.class);
             startActivity(nsdIntent);
             finish();
         } else {

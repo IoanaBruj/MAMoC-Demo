@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import uk.ac.standrews.cs.mamoc_client.Communication.CommunicationController;
 import uk.ac.standrews.cs.mamoc_client.Communication.DataHandler;
 import uk.ac.standrews.cs.mamoc_client.Communication.DataSender;
-import uk.ac.standrews.cs.mamoc_client.Communication.NsdHelper;
 import uk.ac.standrews.cs.mamoc_client.Communication.TransferConstants;
 import uk.ac.standrews.cs.mamoc_client.Constants;
 import uk.ac.standrews.cs.mamoc_client.DB.DBAdapter;
