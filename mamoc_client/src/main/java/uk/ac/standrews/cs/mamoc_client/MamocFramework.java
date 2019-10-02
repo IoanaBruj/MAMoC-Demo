@@ -1,26 +1,23 @@
 package uk.ac.standrews.cs.mamoc_client;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Environment;
-import android.provider.Settings;
 import android.util.Log;
 
 import org.atteo.classindex.ClassIndex;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.UUID;
 
 import uk.ac.standrews.cs.mamoc_client.Annotation.Offloadable;
-import uk.ac.standrews.cs.mamoc_client.Communication.CommunicationController;
+import uk.ac.standrews.cs.mamoc_client.Communication.ServiceDiscovery;
 import uk.ac.standrews.cs.mamoc_client.DB.DBAdapter;
 import uk.ac.standrews.cs.mamoc_client.Decompiler.DexDecompiler;
 import uk.ac.standrews.cs.mamoc_client.DecisionMaker.DecisionEngine;
+import uk.ac.standrews.cs.mamoc_client.Execution.DeploymentController;
 import uk.ac.standrews.cs.mamoc_client.Execution.ExceptionHandler;
-import uk.ac.standrews.cs.mamoc_client.Execution.ExecutionController;
 import uk.ac.standrews.cs.mamoc_client.Model.MobileNode;
 import uk.ac.standrews.cs.mamoc_client.Profilers.DeviceProfiler;
 import uk.ac.standrews.cs.mamoc_client.Execution.ExecutionLocation;
@@ -32,8 +29,8 @@ public class MamocFramework {
     private final String TAG = "MamocFramework";
     private Context mContext;
 
-    public CommunicationController commController;
-    private ExecutionController execController;
+    public ServiceDiscovery serviceDiscovery;
+    public DeploymentController deploymentController;
     public DecisionEngine decisionEngine;
     public DeviceProfiler deviceProfiler;
     public NetworkProfiler networkProfiler;
@@ -52,8 +49,8 @@ public class MamocFramework {
     }
 
     public void start() {
-        this.commController = CommunicationController.getInstance(mContext);
-        this.execController = ExecutionController.getInstance(mContext);
+        this.serviceDiscovery = ServiceDiscovery.getInstance(mContext);
+        this.deploymentController = DeploymentController.getInstance(mContext);
         this.decisionEngine = DecisionEngine.getInstance(mContext);
 
         this.deviceProfiler = new DeviceProfiler(mContext);
@@ -185,11 +182,11 @@ public class MamocFramework {
 
     public void execute(ExecutionLocation location, String task_name, String resource_name, Object... params) {
         if (location == ExecutionLocation.DYNAMIC){
-            execController.runDynamically(mContext, task_name, resource_name, params);
+            deploymentController.runDynamically(mContext, task_name, resource_name, params);
         } else if (location == ExecutionLocation.LOCAL) {
-            execController.runLocally(task_name, resource_name, params);
+            deploymentController.runLocally(task_name, resource_name, params);
         } else {
-            execController.runRemotely(mContext, location, task_name, resource_name, params);
+            deploymentController.runRemotely(mContext, location, task_name, resource_name, params);
         }
     }
 

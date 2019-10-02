@@ -24,7 +24,7 @@ import io.crossbar.autobahn.wamp.Session;
 import io.crossbar.autobahn.wamp.types.CloseDetails;
 import io.crossbar.autobahn.wamp.types.ExitInfo;
 
-import uk.ac.standrews.cs.mamoc_client.Communication.CommunicationController;
+import uk.ac.standrews.cs.mamoc_client.Communication.ServiceDiscovery;
 import uk.ac.standrews.cs.mamoc_client.Constants;
 import uk.ac.standrews.cs.mamoc_client.MamocFramework;
 import uk.ac.standrews.cs.mamoc_client.Model.CloudNode;
@@ -64,8 +64,8 @@ public class DiscoveryActivity extends AppCompatActivity {
         }
 
         framework = MamocFramework.getInstance(this);
-        framework.commController = CommunicationController.getInstance(this);
-        framework.commController.startConnectionListener();
+        framework.serviceDiscovery = ServiceDiscovery.getInstance(this);
+        framework.serviceDiscovery.startConnectionListener();
 
         listeningPort = findViewById(R.id.ListenPort);
 
@@ -130,7 +130,7 @@ public class DiscoveryActivity extends AppCompatActivity {
         Utils.alert(DiscoveryActivity.this, "Connected.");
         edgeBtn.setText("Status: Connected to " + EDGE_IP);
         edgeBtn.setEnabled(false);
-        framework.commController.addEdgeDevice(edge);
+        framework.serviceDiscovery.addEdgeDevice(edge);
         savePrefs("edgeIP", EDGE_IP);
     }
 
@@ -143,7 +143,7 @@ public class DiscoveryActivity extends AppCompatActivity {
     private void onDisconnectCallbackEdge(Session session, boolean wasClean) {
         Log.d(TAG, String.format("Session with ID=%s, disconnected.", session.getID()));
         Utils.alert(DiscoveryActivity.this, "Disconnected.");
-        framework.commController.removeEdgeDevice(edge);
+        framework.serviceDiscovery.removeEdgeDevice(edge);
         edgeBtn.setEnabled(true);
     }
 
@@ -172,8 +172,8 @@ public class DiscoveryActivity extends AppCompatActivity {
         Utils.alert(DiscoveryActivity.this, "Connected.");
         cloudBtn.setText("Status: Connected to " + CLOUD_IP);
         cloudBtn.setEnabled(false);
-        framework.commController.addCloudDevices(cloud);
-        Log.d(TAG, "commController added " + CLOUD_IP);
+        framework.serviceDiscovery.addCloudDevices(cloud);
+        Log.d(TAG, "serviceDiscovery added " + CLOUD_IP);
         savePrefs("cloudIP", CLOUD_IP);
     }
 
@@ -186,7 +186,7 @@ public class DiscoveryActivity extends AppCompatActivity {
     private void onDisconnectCallbackCloud(Session session, boolean wasClean) {
         Log.d(TAG, String.format("Session with ID=%s, disconnected.", session.getID()));
         Utils.alert(DiscoveryActivity.this, "Disconnected.");
-        framework.commController.removeCloudDevice(cloud);
+        framework.serviceDiscovery.removeCloudDevice(cloud);
         cloudBtn.setEnabled(true);
     }
 

@@ -25,11 +25,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import uk.ac.standrews.cs.mamoc_client.Communication.CommunicationController;
+import uk.ac.standrews.cs.mamoc_client.Communication.ServiceDiscovery;
 import uk.ac.standrews.cs.mamoc_client.Constants;
 import uk.ac.standrews.cs.mamoc_client.DB.DBAdapter;
 import uk.ac.standrews.cs.mamoc_client.Communication.WiFiP2PSDReceiver;
-import uk.ac.standrews.cs.mamoc_client.Communication.TransferConstants;
 import uk.ac.standrews.cs.mamoc_client.Communication.DataHandler;
 import uk.ac.standrews.cs.mamoc_client.Communication.DataSender;
 import uk.ac.standrews.cs.mamoc_client.MamocFramework;
@@ -58,7 +57,7 @@ public class WiFiP2PSDActivity extends AppCompatActivity implements PeerListFrag
     WiFiP2PSDReceiver wiFiP2PSDReceiver;
     //private boolean isWifiP2pEnabled = false;
 
-    private CommunicationController commController;
+    private ServiceDiscovery serviceDiscovery;
 
     WifiP2pDnsSdServiceRequest serviceRequest = null;
 
@@ -90,10 +89,10 @@ public class WiFiP2PSDActivity extends AppCompatActivity implements PeerListFrag
 
         selfNode = MamocFramework.getInstance(this).getSelfNode();
 
-        commController = CommunicationController.getInstance(this);
+        serviceDiscovery = ServiceDiscovery.getInstance(this);
         selectedDevice = new MobileNode(this);
         progressBar = findViewById(R.id.progressBarNSD);
-        commController.startConnectionListener();
+        serviceDiscovery.startConnectionListener();
 
         wifiP2pManager = (WifiP2pManager) getSystemService(WIFI_P2P_SERVICE);
         wifip2pChannel = wifiP2pManager.initialize(this, getMainLooper(), null);
@@ -283,7 +282,7 @@ public class WiFiP2PSDActivity extends AppCompatActivity implements PeerListFrag
     protected void onDestroy() {
 //        mNsdHelper.tearDown();
 //        connListener.tearDown();
-        commController.stopConnectionListener();
+        serviceDiscovery.stopConnectionListener();
 
 //        Utility.clearPreferences(LocalDashWiFiP2PSD.this);
 //        Utility.deletePersistentGroups(wifiP2pManager, wifip2pChannel);

@@ -237,9 +237,9 @@ public class DecisionEngine {
     }
 
     private MamocNode getNodeWithMaxOffloadingScore() {
-        TreeSet<MobileNode> mobileNodes = framework.commController.getMobileDevices();
-        TreeSet<EdgeNode> edgeNodes = framework.commController.getEdgeDevices();
-        TreeSet<CloudNode> cloudNodes = framework.commController.getCloudDevices();
+        TreeSet<MobileNode> mobileNodes = framework.serviceDiscovery.getMobileDevices();
+        TreeSet<EdgeNode> edgeNodes = framework.serviceDiscovery.getEdgeDevices();
+        TreeSet<CloudNode> cloudNodes = framework.serviceDiscovery.getCloudDevices();
 
         HashMap<MamocNode, ArrayList<Fuzzy>> availableSites = new HashMap<>();
         ArrayList<Fuzzy> criteriaImportance;

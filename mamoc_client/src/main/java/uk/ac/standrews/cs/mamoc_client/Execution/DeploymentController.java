@@ -29,13 +29,13 @@ import static uk.ac.standrews.cs.mamoc_client.Constants.OFFLOADING_PUB;
 import static uk.ac.standrews.cs.mamoc_client.Constants.OFFLOADING_RESULT_SUB;
 import static uk.ac.standrews.cs.mamoc_client.Constants.WAMP_LOOKUP;
 
-public class ExecutionController {
+public class DeploymentController {
 
-    private final String TAG = "ExecutionController";
+    private final String TAG = "DeploymentController";
 
     private Context mContext;
 
-    private static ExecutionController instance;
+    private static DeploymentController instance;
 
     private MamocFramework framework;
 
@@ -44,16 +44,16 @@ public class ExecutionController {
 
     private TaskExecution task;
 
-    private ExecutionController(Context context) {
+    private DeploymentController(Context context) {
         this.mContext = context;
         framework = MamocFramework.getInstance(context);
     }
 
-    public static ExecutionController getInstance(Context context) {
+    public static DeploymentController getInstance(Context context) {
         if (instance == null) {
-            synchronized (ExecutionController.class) {
+            synchronized (DeploymentController.class) {
                 if (instance == null) {
-                    instance = new ExecutionController(context);
+                    instance = new DeploymentController(context);
                 }
             }
         }
@@ -167,7 +167,7 @@ public class ExecutionController {
 
         Log.d(TAG, "running " + task_name + " on edge");
 
-        TreeSet<EdgeNode> edgeNodes = framework.commController.getEdgeDevices();
+        TreeSet<EdgeNode> edgeNodes = framework.serviceDiscovery.getEdgeDevices();
         if (!edgeNodes.isEmpty()) {
             EdgeNode node = edgeNodes.first(); // for now we assume we are connected to one edge device
 //            task.setRttSpeed(framework.networkProfiler.measureRtt(node.getIp(), node.getPort()));
@@ -182,7 +182,7 @@ public class ExecutionController {
 
         Log.d(TAG, "running " + task_name + " on public cloud");
 
-        TreeSet<CloudNode> cloudNodes = framework.commController.getCloudDevices();
+        TreeSet<CloudNode> cloudNodes = framework.serviceDiscovery.getCloudDevices();
         if (!cloudNodes.isEmpty()) {
             CloudNode node = cloudNodes.first();
             runRemotely(context, node, task_name, resource_name, params);

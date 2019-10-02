@@ -9,14 +9,14 @@ import uk.ac.standrews.cs.mamoc_client.Model.EdgeNode;
 import uk.ac.standrews.cs.mamoc_client.Model.MobileNode;
 import uk.ac.standrews.cs.mamoc_client.Utils.Utils;
 
-public class CommunicationController {
-    private final String TAG = "CommunicationController";
+public class ServiceDiscovery {
+    private final String TAG = "ServiceDiscovery";
 
     private Context mContext;
     private int myPort;
     private ConnectionListener connListener;
 
-    private static CommunicationController instance;
+    private static ServiceDiscovery instance;
 
     private TreeSet<MobileNode> mobileDevices = new TreeSet<>();
     private TreeSet<EdgeNode> edgeDevices = new TreeSet<>();
@@ -24,17 +24,17 @@ public class CommunicationController {
 
     private boolean isConnectionListenerRunning = false;
 
-    private CommunicationController(Context context) {
+    private ServiceDiscovery(Context context) {
         this.mContext = context;
         myPort = Utils.getPort(mContext);
         connListener = new ConnectionListener(mContext, myPort);
     }
 
-    public static CommunicationController getInstance(Context context) {
+    public static ServiceDiscovery getInstance(Context context) {
         if (instance == null) {
-            synchronized (CommunicationController.class) {
+            synchronized (ServiceDiscovery.class) {
                 if (instance == null) {
-                    instance = new CommunicationController(context);
+                    instance = new ServiceDiscovery(context);
                 }
             }
         }
