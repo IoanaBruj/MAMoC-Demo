@@ -8,9 +8,9 @@ import io.crossbar.autobahn.websocket.WebSocketConnectionHandler;
 import io.crossbar.autobahn.websocket.exceptions.WebSocketException;
 import io.crossbar.autobahn.websocket.interfaces.IWebSocket;
 import io.crossbar.autobahn.websocket.interfaces.IWebSocketConnectionHandler;
-//import uk.ac.standrews.cs.mamoc_client.WebSocket.WebSocket;
+import uk.ac.standrews.cs.mamoc_client.WebSocket.WebSocket;
 
-public class EdgeNode extends MamocNode implements Comparable<MamocNode> {
+public class EdgeNode extends MamocNode implements WebSocket, Comparable<MamocNode> {
 
     private String wsUri;
     private final IWebSocket edgeConnection = new WebSocketConnection();
@@ -26,7 +26,7 @@ public class EdgeNode extends MamocNode implements Comparable<MamocNode> {
         session = new Session();
     }
 
-//    @Override
+    @Override
     public void connect() {
         try {
             connectToWebSocket(wsUri, new WebSocketConnectionHandler());
@@ -39,7 +39,7 @@ public class EdgeNode extends MamocNode implements Comparable<MamocNode> {
         edgeConnection.connect(wsUri, wsHandler);
     }
 
-//    @Override
+    @Override
     public void send(String text) {
         if (edgeConnection.isConnected()) {
             edgeConnection.sendMessage(text);
@@ -48,15 +48,15 @@ public class EdgeNode extends MamocNode implements Comparable<MamocNode> {
         }
     }
 
-//    @Override
-//    public void send(byte[] binary) {
-//        edgeConnection.sendMessage(binary, true);
-//    }
-//
-//    @Override
-//    public void end() {
-//        edgeConnection.sendClose();
-//    }
+    @Override
+    public void send(byte[] binary) {
+        edgeConnection.sendMessage(binary, true);
+    }
+
+    @Override
+    public void end() {
+        edgeConnection.sendClose();
+    }
 
     @Override
     public int compareTo(MamocNode o) {

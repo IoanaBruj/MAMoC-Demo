@@ -44,11 +44,9 @@ public class DBAdapter {
         return instance;
     }
 
-    public long addTaskExecution(TaskExecution task){
+    public void addTaskExecution(TaskExecution task){
 
         Log.d(TAG, "inserting task to db: " + task.getTaskName());
-
-        if (task == null) { return -1; }
 
         ContentValues values = new ContentValues();
         values.put(DBHelper.COL_APP_NAME, context.getPackageName());
@@ -60,7 +58,7 @@ public class DBAdapter {
         values.put(DBHelper.COL_OFFLOAD_DATE, task.getExecutionDate());
         values.put(DBHelper.COL_OFFLOAD_COMPLETE, task.isCompleted() ? 1 : 0);
 
-        return db.insert(TABLE_OFFLOAD, null, values);
+        db.insert(TABLE_OFFLOAD, null, values);
     }
 
     public ArrayList<TaskExecution> getExecutions(String taskName, boolean Remote){
@@ -122,15 +120,14 @@ public class DBAdapter {
         return taskExecutions;
     }
 
-
-
     public long addMobileDevice(MobileNode device) {
 
         Log.d(TAG, "inserting mobile device: " + device.getNodeName());
 
-        if (device == null || device.getIp() == null || device.getPort() == 0) {
+        if (device.getIp() == null || device.getPort() == 0) {
             return -1;
         }
+
         ContentValues values = new ContentValues();
         values.put(DBHelper.COL_DEV_IP, device.getIp());
         values.put(DBHelper.COL_DEV_NAME, device.getDeviceID());
@@ -242,12 +239,7 @@ public class DBAdapter {
         return (cursor.getCount() > 0);
     }
 
-    public int clearMobileDevicesTable() {
-        return db.delete(TABLE_MOBILE_DEVICES, null, null);
+    public int clearTable(String tableName) {
+        return db.delete(tableName, null, null);
     }
-
-    public int clearOffloadTable() {
-        return db.delete(TABLE_OFFLOAD, null, null);
-    }
-
 }

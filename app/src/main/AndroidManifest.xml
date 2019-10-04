@@ -31,6 +31,7 @@
         </activity>
         <activity
             android:name="uk.ac.standrews.cs.mamoc_client.ServiceDiscovery.DiscoveryActivity"
+            android:label="MAMoC Service Discovery"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="uk.ac.standrews.cs.mamoc_client.ServiceDiscovery.WiFiP2PSDActivity"

@@ -112,6 +112,8 @@ public class DiscoveryActivity extends AppCompatActivity {
 
         String wsUri = edgeTextView.getText().toString();
 
+        EDGE_IP = wsUri;
+
         if (!wsUri.startsWith("ws://") && !wsUri.startsWith("wss://")) {
             wsUri = "ws://" + wsUri + ":8080/ws";
         }
@@ -142,7 +144,7 @@ public class DiscoveryActivity extends AppCompatActivity {
 
     private void onDisconnectCallbackEdge(Session session, boolean wasClean) {
         Log.d(TAG, String.format("Session with ID=%s, disconnected.", session.getID()));
-        Utils.alert(DiscoveryActivity.this, "Disconnected.");
+        Utils.alert(DiscoveryActivity.this, "Cannot connect to " + EDGE_IP);
         framework.serviceDiscovery.removeEdgeDevice(edge);
         edgeBtn.setEnabled(true);
     }
@@ -152,6 +154,7 @@ public class DiscoveryActivity extends AppCompatActivity {
         cloud = new CloudNode(CLOUD_IP, 8080);
 
         String wsUri = cloudTextView.getText().toString();
+        CLOUD_IP = wsUri;
 
         if (!wsUri.startsWith("ws://") && !wsUri.startsWith("wss://")) {
             wsUri = "ws://" + wsUri + ":8080/ws";
@@ -185,7 +188,7 @@ public class DiscoveryActivity extends AppCompatActivity {
 
     private void onDisconnectCallbackCloud(Session session, boolean wasClean) {
         Log.d(TAG, String.format("Session with ID=%s, disconnected.", session.getID()));
-        Utils.alert(DiscoveryActivity.this, "Disconnected.");
+        Utils.alert(DiscoveryActivity.this, "Cannot connect to " + CLOUD_IP);
         framework.serviceDiscovery.removeCloudDevice(cloud);
         cloudBtn.setEnabled(true);
     }
