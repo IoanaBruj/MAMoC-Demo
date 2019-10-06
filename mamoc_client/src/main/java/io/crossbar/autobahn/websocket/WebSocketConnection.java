@@ -153,13 +153,13 @@ public class WebSocketConnection implements IWebSocket {
 
                 try {
 
-                    // create & start WebSocket reader
+                    // create & calculateTopsis WebSocket reader
                     createReader();
 
-                    // create & start WebSocket writer
+                    // create & calculateTopsis WebSocket writer
                     createWriter();
 
-                    // start WebSockets handshake
+                    // calculateTopsis WebSockets handshake
                     ClientHandshake hs = new ClientHandshake(mWsHost + ":" + mWsPort);
                     hs.mPath = mWsPath;
                     hs.mQuery = mWsQuery;

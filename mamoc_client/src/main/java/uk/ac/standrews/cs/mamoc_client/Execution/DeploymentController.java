@@ -23,6 +23,7 @@ import java8.util.concurrent.CompletableFuture;
 import uk.ac.standrews.cs.mamoc_client.MamocFramework;
 import uk.ac.standrews.cs.mamoc_client.Model.CloudNode;
 import uk.ac.standrews.cs.mamoc_client.Model.EdgeNode;
+import uk.ac.standrews.cs.mamoc_client.Model.MobileNode;
 import uk.ac.standrews.cs.mamoc_client.Model.TaskExecution;
 
 import static uk.ac.standrews.cs.mamoc_client.Constants.OFFLOADING_PUB;
@@ -103,9 +104,11 @@ public class DeploymentController {
 
             endSendingTime = System.nanoTime();
             double executionTime = (double)(endSendingTime - startSendingTime) * 1.0e-9;
+
+            broadcastLocalResults(result, executionTime);
+
             task.setExecutionTime(executionTime);
             addExecutionEntry(task);
-            broadcastLocalResults(result, executionTime);
 
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |
                 InstantiationException | InvocationTargetException e) {
@@ -114,7 +117,7 @@ public class DeploymentController {
         }
     }
 
-    public void runRemotely(Context context, ExecutionLocation location, String task_name, String resource_name, Object... params) {
+    private void runRemotely(Context context, ExecutionLocation location, String task_name, String resource_name, Object... params) {
 
         Log.d(TAG, "running " + task_name + " remotely");
 
@@ -159,6 +162,8 @@ public class DeploymentController {
 
         Log.d(TAG, "running " + task_name + " nearby");
 
+        TreeSet<MobileNode> mobileNodes = framework.serviceDiscovery.listMobileNodes();
+
         // TODO: Java Reflect dynamic call to class on connected mobile nodes
 
     }
@@ -167,7 +172,7 @@ public class DeploymentController {
 
         Log.d(TAG, "running " + task_name + " on edge");
 
-        TreeSet<EdgeNode> edgeNodes = framework.serviceDiscovery.getEdgeDevices();
+        TreeSet<EdgeNode> edgeNodes = framework.serviceDiscovery.listEdgeNodes();
         if (!edgeNodes.isEmpty()) {
             EdgeNode node = edgeNodes.first(); // for now we assume we are connected to one edge device
 //            task.setRttSpeed(framework.networkProfiler.measureRtt(node.getIp(), node.getPort()));
@@ -182,7 +187,7 @@ public class DeploymentController {
 
         Log.d(TAG, "running " + task_name + " on public cloud");
 
-        TreeSet<CloudNode> cloudNodes = framework.serviceDiscovery.getCloudDevices();
+        TreeSet<CloudNode> cloudNodes = framework.serviceDiscovery.listPublicNodes();
         if (!cloudNodes.isEmpty()) {
             CloudNode node = cloudNodes.first();
             runRemotely(context, node, task_name, resource_name, params);

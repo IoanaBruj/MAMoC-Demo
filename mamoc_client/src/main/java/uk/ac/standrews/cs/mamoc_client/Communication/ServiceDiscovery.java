@@ -82,7 +82,7 @@ public class ServiceDiscovery {
         return isConnectionListenerRunning;
     }
 
-    public TreeSet<MobileNode> getMobileDevices() {
+    public TreeSet<MobileNode> listMobileNodes() {
         return mobileDevices;
     }
 
@@ -94,7 +94,7 @@ public class ServiceDiscovery {
         this.mobileDevices.remove(mobileNode);
     }
 
-    public TreeSet<EdgeNode> getEdgeDevices() {
+    public TreeSet<EdgeNode> listEdgeNodes() {
         return edgeDevices;
     }
 
@@ -106,7 +106,7 @@ public class ServiceDiscovery {
         this.edgeDevices.remove(edge);
     }
 
-    public TreeSet<CloudNode> getCloudDevices() {
+    public TreeSet<CloudNode> listPublicNodes() {
         return cloudDevices;
     }
 

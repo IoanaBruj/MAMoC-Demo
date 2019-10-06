@@ -36,10 +36,6 @@ public class DexDecompiler {
     }
 
     public void start(){
-        extractDexFiles();
-    }
-
-    private void extractDexFiles() {
         File sourceDir = getAPKSourceDir(context);
         File outputDir = getOutputDir(context);
 
@@ -64,14 +60,14 @@ public class DexDecompiler {
 
         if (!dexFiles.isEmpty()) {
             for (File dexFile : dexFiles) {
-                decompileDex(dexFile);
+                decompileDexFile(dexFile);
             }
         } else {
             Log.d("DexFile", "No Dex File Found!");
         }
     }
 
-    private void decompileDex(File dexInputFile) {
+    private void decompileDexFile(File dexInputFile) {
         ThreadGroup group = new ThreadGroup("Dex to Java Group");
         int STACK_SIZE = 20 * 1024 * 1024;
         Thread javaExtractionThread = new Thread(group, (Runnable) () -> {

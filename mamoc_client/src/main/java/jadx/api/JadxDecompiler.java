@@ -31,8 +31,6 @@ import jadx.core.utils.exceptions.JadxException;
 import jadx.core.utils.exceptions.JadxRuntimeException;
 import jadx.core.utils.files.InputFile;
 import jadx.core.xmlgen.BinaryXMLParser;
-import jadx.core.xmlgen.ResourcesSaver;
-import java8.util.concurrent.CompletableFuture;
 
 /**
  * Jadx API usage example:
@@ -45,7 +43,7 @@ import java8.util.concurrent.CompletableFuture;
  * <p>
  * Instead of 'save()' you can get list of decompiled classes:
  * <pre><code>
- *  for(JavaClass cls : jadx.getClasses()) {
+ *  for(JavaClass cls : jadx.getApplicationClasses()) {
  *      System.out.println(cls.getCode());
  *  }
  * </code></pre>
@@ -156,13 +154,10 @@ public final class JadxDecompiler {
 		LOG.info("processing ...");
 		ExecutorService executor = Executors.newFixedThreadPool(threadsCount);
 
-		for (final JavaClass cls : getClasses()) {
+		for (final JavaClass cls : getApplicationClasses()) {
 			executor.execute(() -> {
 
 				for (String className : classNames) {
-//                    Log.d("className:", className);
-//                    Log.d("dexClass:", cls.getFullName());
-
 					if (cls.getFullName().equals(className)) {
 						Log.d("saving annotated class:", cls.getFullName());
 						cls.decompile();
@@ -193,7 +188,7 @@ public final class JadxDecompiler {
 //		ExecutorService executor = Executors.newFixedThreadPool(threadsCount);
 //
 //		final CompletableFuture<String> result = CompletableFuture.supplyAsync(() -> {
-//			for (final JavaClass cls : getClasses()) {
+//			for (final JavaClass cls : getApplicationClasses()) {
 //
 //				Log.d("name: ", cls.getFullName());
 //
@@ -223,7 +218,7 @@ public final class JadxDecompiler {
 //		return result;
 //	}
 
-	public List<JavaClass> getClasses() {
+	public List<JavaClass> getApplicationClasses() {
 		if (root == null) {
 			return Collections.emptyList();
 		}
@@ -252,7 +247,7 @@ public final class JadxDecompiler {
 	}
 
 	public List<JavaPackage> getPackages() {
-		List<JavaClass> classList = getClasses();
+		List<JavaClass> classList = getApplicationClasses();
 		if (classList.isEmpty()) {
 			return Collections.emptyList();
 		}

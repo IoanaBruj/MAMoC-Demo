@@ -12,7 +12,7 @@ package uk.ac.standrews.cs.mamoc_demo.Benchmark;
 <pre>
 	Stopwatch Q = new Stopwatch;
 <p>
-	Q.start();
+	Q.calculateTopsis();
 	//
 	// code to be timed here ...
 	//

@@ -120,48 +120,48 @@ public class ExampleInstrumentedTest {
         mn.setIp("136.64.53.132");
         framework.serviceDiscovery.addMobileDevice(mn);
 
-        assertFalse(framework.serviceDiscovery.getMobileDevices().isEmpty());
+        assertFalse(framework.serviceDiscovery.listMobileNodes().isEmpty());
     }
 
 //    @Test
 //    public void removeMobileDevice() {
-//        if (framework.serviceDiscovery.getMobileDevices().size() > 0) {
+//        if (framework.serviceDiscovery.listMobileNodes().size() > 0) {
 //            framework.serviceDiscovery.removeMobileDevice(mn);
 //        }
 //
-//        assertTrue(framework.serviceDiscovery.getMobileDevices().isEmpty());
+//        assertTrue(framework.serviceDiscovery.listMobileNodes().isEmpty());
 //    }
 
     @Test
     public void addEdgeDevice() {
         framework.serviceDiscovery.addEdgeDevice(en);
 
-        assertFalse(framework.serviceDiscovery.getEdgeDevices().isEmpty());
+        assertFalse(framework.serviceDiscovery.listEdgeNodes().isEmpty());
     }
 
 //    @Test
 //    public void removeEdgeDevice() {
-//        if (framework.serviceDiscovery.getEdgeDevices().size() > 0) {
+//        if (framework.serviceDiscovery.listEdgeNodes().size() > 0) {
 //            framework.serviceDiscovery.removeEdgeDevice(en);
 //        }
 //
-//        assertTrue(framework.serviceDiscovery.getEdgeDevices().isEmpty());
+//        assertTrue(framework.serviceDiscovery.listEdgeNodes().isEmpty());
 //    }
 
     @Test
     public void addCloudDevice() {
         framework.serviceDiscovery.addCloudDevices(cn);
 
-        assertFalse(framework.serviceDiscovery.getCloudDevices().isEmpty());
+        assertFalse(framework.serviceDiscovery.listPublicNodes().isEmpty());
     }
 
 //    @Test
 //    public void removeCloudDevice() {
-//        if (framework.serviceDiscovery.getCloudDevices().size() > 0) {
+//        if (framework.serviceDiscovery.listPublicNodes().size() > 0) {
 //            framework.serviceDiscovery.removeCloudDevice(cn);
 //        }
 //
-//        assertTrue(framework.serviceDiscovery.getCloudDevices().isEmpty());
+//        assertTrue(framework.serviceDiscovery.listPublicNodes().isEmpty());
 //    }
 
     // DexDecompiler Tests

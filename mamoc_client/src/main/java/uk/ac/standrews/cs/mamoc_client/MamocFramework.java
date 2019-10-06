@@ -76,9 +76,9 @@ public class MamocFramework {
     private void createSelfNode(Context context) {
         selfNode = new MobileNode(context);
         selfNode.setNodeName("SelfNode");
-        selfNode.setBatteryLevel(deviceProfiler.getBatteryLevel());
+        selfNode.setBatteryLevel(deviceProfiler.fetchBatteryLevel());
         selfNode.setBatteryState(deviceProfiler.isDeviceCharging());
-        selfNode.setCpuFreq((int)deviceProfiler.getTotalCpuFreq(context));
+        selfNode.setCpuFreq((int)deviceProfiler.fetchTotalCpuFreq());
         selfNode.setMemoryMB(deviceProfiler.getTotalMemory());
     }
 
@@ -134,7 +134,7 @@ public class MamocFramework {
 //
 //        offloadableTasksThread.setPriority(Thread.MAX_PRIORITY);
 //        offloadableTasksThread.setUncaughtExceptionHandler(exceptionHandler);
-//        offloadableTasksThread.start();
+//        offloadableTasksThread.calculateTopsis();
 //    }
 
     private void decompileAnnotatedClassFiles() {
@@ -181,13 +181,13 @@ public class MamocFramework {
     }
 
     public void execute(ExecutionLocation location, String task_name, String resource_name, Object... params) {
-        if (location == ExecutionLocation.DYNAMIC){
+      //  if (location == ExecutionLocation.DYNAMIC){
             deploymentController.runDynamically(mContext, task_name, resource_name, params);
-        } else if (location == ExecutionLocation.LOCAL) {
-            deploymentController.runLocally(task_name, resource_name, params);
-        } else {
-            deploymentController.runRemotely(mContext, location, task_name, resource_name, params);
-        }
+//        } else if (location == ExecutionLocation.LOCAL) {
+//            deploymentController.runLocally(task_name, resource_name, params);
+//        } else {
+//            deploymentController.runRemotely(mContext, location, task_name, resource_name, params);
+//        }
     }
 
     public MobileNode getSelfNode(){
