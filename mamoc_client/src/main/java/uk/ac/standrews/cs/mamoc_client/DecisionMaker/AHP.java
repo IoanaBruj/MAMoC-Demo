@@ -99,7 +99,7 @@ public class AHP {
     /**
      * @return the user input of the pairwise comparisons
      */
-    private double[] getPairwiseComparisonArray() {
+    private double[] getPairwiseComparison() {
         return pairwiseComparisonArray;
     }
 
@@ -172,7 +172,7 @@ public class AHP {
 
     void calculateAHP(){
 
-        double[] compArray = getPairwiseComparisonArray();
+        double[] compArray = getPairwiseComparison();
 
         // Set the pairwise comparison values
         compArray[0] = Config.BANDWIDTH_SPEED;
@@ -188,11 +188,11 @@ public class AHP {
 
         this.setPairwiseComparisonArray(compArray);
 
-        for (int i = 0; i < this.getNrOfPairwiseComparisons(); i++) {
+//        for (int i = 0; i < this.getNrOfPairwiseComparisons(); i++) {
 //            Log.d(TAG, "Importance of " + Config.criteria[ahp.getIndicesForPairwiseComparison(i)[0]] + " compared to ");
 //            Log.d(TAG, Config.criteria[this.getIndicesForPairwiseComparison(i)[1]] + "= ");
-//            Log.d(TAG, String.valueOf(this.getPairwiseComparisonArray()[i]));
-        }
+//            Log.d(TAG, String.valueOf(this.getPairwiseComparison()[i]));
+//        }
 
         Log.d(TAG, "Consistency Index: " + Config.df.format(this.getConsistencyIndex()));
         Log.d(TAG, "Consistency Ratio: " + Config.df.format(this.getConsistencyRatio()) + "%");

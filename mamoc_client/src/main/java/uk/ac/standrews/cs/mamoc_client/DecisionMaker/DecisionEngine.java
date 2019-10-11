@@ -147,17 +147,17 @@ public class DecisionEngine {
             availableSites.put(node, criteriaImportance);
         }
 
-//        for (EdgeNode node : edgeNodes) {
-//            Log.d(TAG, "Edge node: " + node.getNodeName() + " " + node.getIp());
-//            criteriaImportance = profileNode(node);
-//            availableSites.put(node, criteriaImportance);
-//        }
-//
-//        for (CloudNode node : cloudNodes) {
-//            Log.d(TAG, "Cloud node: " + node.getNodeName() + " " + node.getIp());
-//            criteriaImportance = profileNode(node);
-//            availableSites.put(node, criteriaImportance);
-//        }
+        for (EdgeNode node : edgeNodes) {
+            Log.d(TAG, "Edge node: " + node.getNodeName() + " " + node.getIp());
+            criteriaImportance = profileNode(node);
+            availableSites.put(node, criteriaImportance);
+        }
+
+        for (CloudNode node : cloudNodes) {
+            Log.d(TAG, "Cloud node: " + node.getNodeName() + " " + node.getIp());
+            criteriaImportance = profileNode(node);
+            availableSites.put(node, criteriaImportance);
+        }
 
         Log.d(TAG, "Available offloading sites: " + availableSites.size());
 
