@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import uk.ac.standrews.cs.mamoc_client.Communication.ServiceDiscovery;
+import uk.ac.standrews.cs.mamoc_client.ServiceDiscovery.ServiceDiscovery;
 import uk.ac.standrews.cs.mamoc_client.Execution.ExecutionLocation;
 import uk.ac.standrews.cs.mamoc_client.Model.CloudNode;
 import uk.ac.standrews.cs.mamoc_client.Model.EdgeNode;

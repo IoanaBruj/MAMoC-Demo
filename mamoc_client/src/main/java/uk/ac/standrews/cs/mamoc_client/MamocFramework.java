@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import uk.ac.standrews.cs.mamoc_client.Annotation.Offloadable;
-import uk.ac.standrews.cs.mamoc_client.Communication.ServiceDiscovery;
+import uk.ac.standrews.cs.mamoc_client.ServiceDiscovery.ServiceDiscovery;
 import uk.ac.standrews.cs.mamoc_client.DB.DBAdapter;
 import uk.ac.standrews.cs.mamoc_client.Decompiler.DexDecompiler;
 import uk.ac.standrews.cs.mamoc_client.DecisionMaker.DecisionEngine;

@@ -22,10 +22,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import uk.ac.standrews.cs.mamoc_client.Communication.ServiceDiscovery;
-import uk.ac.standrews.cs.mamoc_client.Communication.DataHandler;
-import uk.ac.standrews.cs.mamoc_client.Communication.DataSender;
-import uk.ac.standrews.cs.mamoc_client.Communication.TransferConstants;
 import uk.ac.standrews.cs.mamoc_client.Constants;
 import uk.ac.standrews.cs.mamoc_client.DB.DBAdapter;
 import uk.ac.standrews.cs.mamoc_client.Model.MobileNode;

@@ -1,5 +1,5 @@
 
-package uk.ac.standrews.cs.mamoc_client.Communication;
+package uk.ac.standrews.cs.mamoc_client.ServiceDiscovery;
 
 /*
  * Copyright (C) 2011 The Android Open Source Project

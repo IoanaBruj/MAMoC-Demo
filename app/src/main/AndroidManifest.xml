@@ -39,7 +39,7 @@
             android:theme="@style/AppTheme.Base" />
 
         <service
-            android:name="uk.ac.standrews.cs.mamoc_client.Communication.DataTransferService"
+            android:name="uk.ac.standrews.cs.mamoc_client.ServiceDiscovery.DataTransferService"
             android:enabled="true" />
 
         <activity

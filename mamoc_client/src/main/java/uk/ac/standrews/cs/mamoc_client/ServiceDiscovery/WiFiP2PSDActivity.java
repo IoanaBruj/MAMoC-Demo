@@ -25,12 +25,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import uk.ac.standrews.cs.mamoc_client.Communication.ServiceDiscovery;
 import uk.ac.standrews.cs.mamoc_client.Constants;
 import uk.ac.standrews.cs.mamoc_client.DB.DBAdapter;
-import uk.ac.standrews.cs.mamoc_client.Communication.WiFiP2PSDReceiver;
-import uk.ac.standrews.cs.mamoc_client.Communication.DataHandler;
-import uk.ac.standrews.cs.mamoc_client.Communication.DataSender;
 import uk.ac.standrews.cs.mamoc_client.MamocFramework;
 import uk.ac.standrews.cs.mamoc_client.Model.MobileNode;
 import uk.ac.standrews.cs.mamoc_client.R;
@@ -137,10 +133,10 @@ public class WiFiP2PSDActivity extends AppCompatActivity implements PeerListFrag
     private void startRegistrationAndDiscovery(int port) {
 
         Map<String, String> record = new HashMap<String, String>();
-        record.put("deviceid", selfNode.getDeviceID());
+        record.put("DeviceID", selfNode.getDeviceID());
         record.put("LocalIP", selfNode.getIp());
-        record.put("portnumber", String.valueOf(port));
-        record.put("devicestatus", "available");
+        record.put("PortNumber", String.valueOf(port));
+        record.put("DeviceStatus", "available");
 
         WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
                 SERVICE_INSTANCE, SERVICE_TYPE, record);
@@ -156,7 +152,6 @@ public class WiFiP2PSDActivity extends AppCompatActivity implements PeerListFrag
             public void onFailure(int error) {
                 Log.e(TAG, "Failure: Failed to add a service");
                 Snackbar.make(findViewById(R.id.progressBarNSD),"Failure: Failed to add a service",Snackbar.LENGTH_LONG).show();
-
             }
         });
         discoverService();

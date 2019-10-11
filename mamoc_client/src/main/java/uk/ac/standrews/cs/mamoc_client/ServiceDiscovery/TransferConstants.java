@@ -1,4 +1,4 @@
-package uk.ac.standrews.cs.mamoc_client.Communication;
+package uk.ac.standrews.cs.mamoc_client.ServiceDiscovery;
 
 public interface TransferConstants {
     String KEY_MY_IP = "LocalIP";

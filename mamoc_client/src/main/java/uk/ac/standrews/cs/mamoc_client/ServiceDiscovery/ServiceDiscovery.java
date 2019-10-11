@@ -1,4 +1,4 @@
-package uk.ac.standrews.cs.mamoc_client.Communication;
+package uk.ac.standrews.cs.mamoc_client.ServiceDiscovery;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,13 +15,13 @@ import java8.util.concurrent.CompletableFuture;
 import uk.ac.standrews.cs.mamoc_client.Model.CloudNode;
 import uk.ac.standrews.cs.mamoc_client.Model.EdgeNode;
 import uk.ac.standrews.cs.mamoc_client.Model.MobileNode;
-import uk.ac.standrews.cs.mamoc_client.ServiceDiscovery.DiscoveryActivity;
 import uk.ac.standrews.cs.mamoc_client.Utils.Utils;
 
 import static uk.ac.standrews.cs.mamoc_client.Constants.CLOUD_IP;
 import static uk.ac.standrews.cs.mamoc_client.Constants.CLOUD_REALM_NAME;
 import static uk.ac.standrews.cs.mamoc_client.Constants.EDGE_IP;
 import static uk.ac.standrews.cs.mamoc_client.Constants.EDGE_REALM_NAME;
+import static uk.ac.standrews.cs.mamoc_client.Constants.SERVICE_DISCOVERY_BROADCASTER;
 
 public class ServiceDiscovery {
     private final String TAG = "ServiceDiscovery";
@@ -134,7 +134,7 @@ public class ServiceDiscovery {
         this.cloudDevices.remove(cloud);
     }
 
-    public void connectEdge(String wsUri){
+    void connectEdge(String wsUri){
         edge = new EdgeNode(EDGE_IP, 8080);
 
         EDGE_IP = wsUri;
@@ -152,7 +152,7 @@ public class ServiceDiscovery {
         CompletableFuture<ExitInfo> exitInfoCompletableFuture = client.connect();
     }
 
-    public void connectCloud(String wsUri){
+    void connectCloud(String wsUri){
         cloud = new CloudNode(CLOUD_IP, 8080);
 
         CLOUD_IP = wsUri;
@@ -175,7 +175,8 @@ public class ServiceDiscovery {
         addEdgeDevice(edge);
         Utils.save(mContext,"edgeIP", EDGE_IP);
 
-        Intent intent = new Intent("connected");
+        Intent intent = new Intent(SERVICE_DISCOVERY_BROADCASTER);
+        intent.setAction("connected");
         intent.putExtra("node", "edge");
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
@@ -184,7 +185,8 @@ public class ServiceDiscovery {
         Log.d(TAG, String.format("Left reason=%s, message=%s", detail.reason, detail.message));
         removeEdgeDevice(edge);
 
-        Intent intent = new Intent("disconnected");
+        Intent intent = new Intent(SERVICE_DISCOVERY_BROADCASTER);
+        intent.setAction("disconnected");
         intent.putExtra("node", "edge");
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
@@ -193,7 +195,8 @@ public class ServiceDiscovery {
         Log.d(TAG, String.format("Session with ID=%s, disconnected.", session.getID()));
         removeEdgeDevice(edge);
 
-        Intent intent = new Intent("disconnected");
+        Intent intent = new Intent(SERVICE_DISCOVERY_BROADCASTER);
+        intent.setAction("disconnected");
         intent.putExtra("node", "edge");
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
@@ -204,7 +207,8 @@ public class ServiceDiscovery {
         Log.d(TAG, "serviceDiscovery added " + CLOUD_IP);
         Utils.save(mContext, "cloudIP", CLOUD_IP);
 
-        Intent intent = new Intent("connected");
+        Intent intent = new Intent(SERVICE_DISCOVERY_BROADCASTER);
+        intent.setAction("connected");
         intent.putExtra("node", "cloud");
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
@@ -213,7 +217,8 @@ public class ServiceDiscovery {
         Log.d(TAG, String.format("Left reason=%s, message=%s", detail.reason, detail.message));
         removeCloudDevice(cloud);
 
-        Intent intent = new Intent("disconnected");
+        Intent intent = new Intent(SERVICE_DISCOVERY_BROADCASTER);
+        intent.setAction("disconnected");
         intent.putExtra("node", "cloud");
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
@@ -222,17 +227,18 @@ public class ServiceDiscovery {
         Log.d(TAG, String.format("Session with ID=%s, disconnected.", session.getID()));
         removeCloudDevice(cloud);
 
-        Intent intent = new Intent("disconnected");
+        Intent intent = new Intent(SERVICE_DISCOVERY_BROADCASTER);
+        intent.setAction("disconnected");
         intent.putExtra("node", "cloud");
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
-    public boolean isEdgeConnected(){
-        return edge.session.isConnected();
+    boolean isEdgeConnected(){
+        return edge != null && edge.session.isConnected();
     }
 
-    public boolean isCloudConnected(){
-        return cloud.session.isConnected();
+    boolean isCloudConnected(){
+        return cloud != null && cloud.session.isConnected();
     }
 
 }

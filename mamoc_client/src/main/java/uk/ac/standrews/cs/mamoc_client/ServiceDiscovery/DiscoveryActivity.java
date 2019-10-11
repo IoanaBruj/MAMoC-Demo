@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
@@ -20,8 +21,8 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Objects;
 
-import uk.ac.standrews.cs.mamoc_client.Communication.ServiceDiscovery;
 import uk.ac.standrews.cs.mamoc_client.Constants;
 import uk.ac.standrews.cs.mamoc_client.MamocFramework;
 import uk.ac.standrews.cs.mamoc_client.R;
@@ -30,6 +31,7 @@ import uk.ac.standrews.cs.mamoc_client.Utils.Utils;
 import static uk.ac.standrews.cs.mamoc_client.Constants.CLOUD_IP;
 import static uk.ac.standrews.cs.mamoc_client.Constants.REQUEST_CODE_ASK_PERMISSIONS;
 import static uk.ac.standrews.cs.mamoc_client.Constants.EDGE_IP;
+import static uk.ac.standrews.cs.mamoc_client.Constants.SERVICE_DISCOVERY_BROADCASTER;
 
 public class DiscoveryActivity extends AppCompatActivity {
 
@@ -45,8 +47,11 @@ public class DiscoveryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discovery);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDiscovery);
+        Toolbar toolbar = findViewById(R.id.toolbarDiscovery);
         setSupportActionBar(toolbar);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter(SERVICE_DISCOVERY_BROADCASTER));
 
         // add back arrow to toolbar
         if (getSupportActionBar() != null){
@@ -115,14 +120,10 @@ public class DiscoveryActivity extends AppCompatActivity {
         cloudBtn.setEnabled(true);
     }
 
-    // Our handler for received Intents. This will be called whenever an Intent
-    // with an action named "custom-event-name" is broadcasted.
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-
-            switch (intent.getAction()){
+            switch (Objects.requireNonNull(intent.getAction())){
                 case "connected":
                     if (intent.getStringExtra("node").equals("edge"))
                         edgeConnected();
@@ -143,7 +144,6 @@ public class DiscoveryActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        // Unregister since the activity is about to be closed.
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         super.onDestroy();
     }
