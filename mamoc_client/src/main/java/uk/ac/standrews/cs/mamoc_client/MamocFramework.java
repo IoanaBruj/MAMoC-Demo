@@ -36,8 +36,6 @@ public class MamocFramework {
     public NetworkProfiler networkProfiler;
     public DBAdapter dbAdapter;
 
-//    private ArrayList<Class> offloadableClasses = new ArrayList<>();
-
     private MobileNode selfNode;
 
     private static MamocFramework instance;
@@ -60,7 +58,6 @@ public class MamocFramework {
 
         // We need to perform class indexing and decompiling after a fresh install of the app
         if (isFirstInstall(mContext)) {
-//            findOffloadableTasks();
             decompileAnnotatedClassFiles();
         }
 

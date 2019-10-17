@@ -23,6 +23,8 @@ import uk.ac.standrews.cs.mamoc_client.Execution.ExceptionHandler;
 
 public class DexDecompiler {
 
+    private static final String TAG = "DexDecompiler";
+
     private static final Logger LOG = LoggerFactory.getLogger(DexDecompiler.class);
 
     private ExceptionHandler exceptionHandler;
@@ -45,6 +47,7 @@ public class DexDecompiler {
         ArrayList<File> dexFiles = new ArrayList<>();
         File[] apkFiles = new File[0];
 
+        assert outputDir != null;
         if (outputDir.exists()) {
             apkFiles = outputDir.listFiles();
         } else{
@@ -53,7 +56,7 @@ public class DexDecompiler {
 
         for (File file : apkFiles) {
             if (file.getName().endsWith("dex")) {
-//                Log.d("DexFile", "Found Dex File:" + file.getName());
+                Log.d(TAG, "Found Dex File:" + file.getName());
                 dexFiles.add(file);
             }
         }
@@ -63,7 +66,7 @@ public class DexDecompiler {
                 decompileDexFile(dexFile);
             }
         } else {
-            Log.d("DexFile", "No Dex File Found!");
+            Log.d(TAG, "No Dex File Found!");
         }
     }
 
@@ -71,7 +74,6 @@ public class DexDecompiler {
         ThreadGroup group = new ThreadGroup("Dex to Java Group");
         int STACK_SIZE = 20 * 1024 * 1024;
         Thread javaExtractionThread = new Thread(group, (Runnable) () -> {
-            boolean javaError = false;
             try {
                 JadxDecompiler jadx = new JadxDecompiler();
                 jadx.setOutputDir(getOutputDir(context));
@@ -81,7 +83,6 @@ public class DexDecompiler {
 //                jadx.saveSources();
             } catch (Exception | StackOverflowError e) {
                 Log.e("error", e.getLocalizedMessage());
-                javaError = true;
             }
 
             if (dexInputFile.exists() && dexInputFile.isFile()) {

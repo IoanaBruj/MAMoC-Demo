@@ -87,9 +87,14 @@ public class ServiceDiscovery {
         isConnectionListenerRunning = true;
     }
 
-    private void startConnectionListener(int port) {
+    public void startConnectionListener(int port) {
         myPort = port;
         startConnectionListener();
+    }
+
+    public void restartConnectionListenerWith(int port) {
+        stopConnectionListener();
+        startConnectionListener(port);
     }
 
     public int getMyPort() {

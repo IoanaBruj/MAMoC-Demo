@@ -1,8 +1,11 @@
 package uk.ac.standrews.cs.mamoc_client.ServiceDiscovery;
 
 public interface TransferConstants {
+
+    int INITIAL_DEFAULT_PORT = 8998;
+
     String KEY_MY_IP = "LocalIP";
-    String KEY_NODE_NAME = "nodename";
+    String KEY_NODE_NAME = "NodeName";
 
     String TYPE_REQUEST = "request";
     String TYPE_RESPONSE = "response";
@@ -14,9 +17,7 @@ public interface TransferConstants {
     int REQUEST_ACCEPTED = 3012;
     int REQUEST_REJECTED = 3013;
 
-    String KEY_BUDDY_NAME = "buddyname";
-    String KEY_PORT_NUMBER = "portnumber";
-    String KEY_DEVICE_STATUS = "devicestatus";
-    String KEY_USER_NAME = "username";
-    String KEY_WIFI_IP = "wifiip";
+    String KEY_PORT_NUMBER = "PortNumber";
+    String KEY_DEVICE_STATUS = "DeviceStatus";
+    String KEY_WIFI_IP = "WifiIP";
 }
