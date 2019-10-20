@@ -35,7 +35,6 @@ import uk.ac.standrews.cs.mamoc_client.Utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class WiFiP2PSDActivity extends AppCompatActivity implements PeerListFragment.OnListFragmentInteractionListener
         , WifiP2pManager.ConnectionInfoListener {

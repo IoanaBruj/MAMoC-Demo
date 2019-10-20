@@ -259,19 +259,19 @@ public class DecisionEngine {
             // TODO: get resource monitoring data from the server and set the importance accordingly
             // Edge device
             if (node.getIp().startsWith("192")) { // DIRTY HACK
-                siteCriteria.add(Fuzzy.VERY_HIGH);
-                siteCriteria.add(Fuzzy.HIGH);
-                siteCriteria.add(Fuzzy.HIGH);
-                siteCriteria.add(Fuzzy.HIGH);
-                siteCriteria.add(Fuzzy.LOW);
+                siteCriteria.add(Fuzzy.VERY_HIGH); // Bandwidth
+                siteCriteria.add(Fuzzy.HIGH);   // Speed
+                siteCriteria.add(Fuzzy.HIGH);   // Availability
+                siteCriteria.add(Fuzzy.HIGH);   // Security
+                siteCriteria.add(Fuzzy.LOW);    // Price
             }
             // Public cloud instance
             else {
-                siteCriteria.add(Fuzzy.LOW);
-                siteCriteria.add(Fuzzy.VERY_HIGH);
-                siteCriteria.add(Fuzzy.VERY_HIGH);
-                siteCriteria.add(Fuzzy.GOOD);
-                siteCriteria.add(Fuzzy.VERY_HIGH);
+                siteCriteria.add(Fuzzy.LOW); // Bandwidth
+                siteCriteria.add(Fuzzy.VERY_HIGH); // Speed
+                siteCriteria.add(Fuzzy.VERY_HIGH); // Availability
+                siteCriteria.add(Fuzzy.GOOD); // Security
+                siteCriteria.add(Fuzzy.VERY_HIGH); // Price
             }
         }
 

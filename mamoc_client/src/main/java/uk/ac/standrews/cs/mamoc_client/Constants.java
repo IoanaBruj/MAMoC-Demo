@@ -9,7 +9,9 @@ public class Constants {
 
     public static final String DB_NAME = "mamoc.db";
 
-    public static String EDGE_IP = "192.168.0.12";
+//    public static String EDGE_IP = "192.168.0.12";
+    public static String EDGE_IP = "djs21.host.cs.st-andrews.ac.uk/offload/ws/"; // Change it to student host server for edge server
+
     public static final String EDGE_REALM_NAME = "mamoc_realm";
 
     public static String CLOUD_IP = "18.130.29.6";

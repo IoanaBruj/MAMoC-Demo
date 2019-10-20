@@ -145,7 +145,8 @@ public class ServiceDiscovery {
         EDGE_IP = wsUri;
 
         if (!wsUri.startsWith("ws://") && !wsUri.startsWith("wss://")) {
-            wsUri = "ws://" + wsUri + ":8080/ws";
+//            wsUri = "ws://" + wsUri + ":8080/ws";
+            wsUri = "wss://" + wsUri; // That is already appended for the student server
         }
 
         // Add all onJoin listeners
