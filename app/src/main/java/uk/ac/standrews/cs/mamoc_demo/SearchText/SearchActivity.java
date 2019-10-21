@@ -9,6 +9,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+
 import uk.ac.standrews.cs.mamoc_client.MamocFramework;
 import uk.ac.standrews.cs.mamoc_client.Execution.ExecutionLocation;
 import uk.ac.standrews.cs.mamoc_demo.DemoBaseActivity;
@@ -24,6 +26,8 @@ public class SearchActivity extends DemoBaseActivity {
     //variables
     private String keyword, fileSize;
     private MamocFramework mamocFramework;
+
+    private boolean runOnce = false;
 
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
@@ -98,7 +102,14 @@ public class SearchActivity extends DemoBaseActivity {
                 runCloud(keyword);
                 break;
             case DYNAMIC:
-                runDynamically(keyword);
+                if (runOnce) {
+                    runDynamically(keyword);
+                } else{ // for running it 30 times and averaging the results
+                    for (int i=0;i<30;i++){
+                        runDynamically(keyword);
+                        Log.d(task_name, "Running " + i+1 + "th time: ");
+                    }
+                }
                 break;
         }
     }
@@ -137,6 +148,7 @@ public class SearchActivity extends DemoBaseActivity {
 
     @Override
     protected void addLog(String result, double executationDuration, double commOverhead) {
+
         searchOutput.append("Execution returned " + result + "\n");
         searchOutput.append("Execution Duration: " + executationDuration + "\n");
         searchOutput.append("Communication Overhead: " + commOverhead + "\n");

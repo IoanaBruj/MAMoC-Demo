@@ -2,13 +2,19 @@ package uk.ac.standrews.cs.mamoc_client.Execution;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,6 +25,7 @@ import java.util.TreeSet;
 import io.crossbar.autobahn.wamp.types.CallResult;
 import io.crossbar.autobahn.wamp.types.Publication;
 import io.crossbar.autobahn.wamp.types.Subscription;
+import jadx.core.utils.files.FileUtils;
 import java8.util.concurrent.CompletableFuture;
 import uk.ac.standrews.cs.mamoc_client.MamocFramework;
 import uk.ac.standrews.cs.mamoc_client.Model.CloudNode;
@@ -45,9 +52,13 @@ public class DeploymentController {
 
     private TaskExecution task;
 
+    File outputResults;
+
+
     private DeploymentController(Context context) {
         this.mContext = context;
         framework = MamocFramework.getInstance(context);
+        outputResults = new File(getOutputDir(context), "output.txt");
     }
 
     public static DeploymentController getInstance(Context context) {
@@ -117,12 +128,13 @@ public class DeploymentController {
         }
     }
 
-    private void runRemotely(Context context, ExecutionLocation location, String task_name, String resource_name, Object... params) {
+    public void runRemotely(Context context, ExecutionLocation location, String task_name, String resource_name, Object... params) {
 
         Log.d(TAG, "running " + task_name + " remotely");
 
         task = new TaskExecution();
         task.setTaskName(task_name);
+        task.setExecLocation(location);
         task.setNetworkType(framework.networkProfiler.getNetworkType());
         task.setExecutionDate(System.currentTimeMillis());
 
@@ -145,7 +157,7 @@ public class DeploymentController {
         }
     }
 
-    public void runDynamically(Context context, String task_name, String resource_name, Object... params) {
+    public ExecutionLocation runDynamically(Context context, String task_name, String resource_name, Object... params) {
 
         Log.d(TAG, "running " + task_name + " dynamically");
 
@@ -156,6 +168,8 @@ public class DeploymentController {
         } else {
             runRemotely(context, location, task_name, resource_name, params);
         }
+
+        return location;
     }
 
     private void runNearby(Context context, String task_name, String resource_name, Object... params) {
@@ -388,6 +402,15 @@ public class DeploymentController {
 
     private void addExecutionEntry(TaskExecution task){
         framework.dbAdapter.addTaskExecution(task);
+
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(new BufferedWriter(new FileWriter(outputResults, true)));
+            out.println(task.getExecLocation().getValue() + " " + task.getExecutionTime());
+            out.close();
+        } catch (Exception e) {
+            Log.e(TAG, "Save file error", e);
+        }
     }
 
     private void broadcastLocalResults(Object result, double duration){
@@ -458,4 +481,27 @@ public class DeploymentController {
         reader.close();
         return sb.toString();
     }
+
+    private File getOutputDir(Context context){
+
+        String ExternalStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+        String folder_main ="mamoc";
+
+        File f = new File(Environment.getExternalStorageDirectory(), folder_main);
+        if (!f.exists()) {
+            f.mkdirs();
+        }
+
+        Log.d("externalstorage", ExternalStoragePath);
+
+        try{
+            return new File(ExternalStoragePath  + "/" + folder_main);
+        } catch (Throwable x) {
+            Log.e(TAG, "could not create an output directory");
+        }
+
+        return null;
+    }
+
 }

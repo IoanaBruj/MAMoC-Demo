@@ -8,6 +8,9 @@ import android.util.Log;
 import org.atteo.classindex.ClassIndex;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -178,13 +181,13 @@ public class MamocFramework {
     }
 
     public void execute(ExecutionLocation location, String task_name, String resource_name, Object... params) {
-      //  if (location == ExecutionLocation.DYNAMIC){
+        if (location == ExecutionLocation.DYNAMIC){
             deploymentController.runDynamically(mContext, task_name, resource_name, params);
-//        } else if (location == ExecutionLocation.LOCAL) {
-//            deploymentController.runLocally(task_name, resource_name, params);
-//        } else {
-//            deploymentController.runRemotely(mContext, location, task_name, resource_name, params);
-//        }
+        } else if (location == ExecutionLocation.LOCAL) {
+            deploymentController.runLocally(task_name, resource_name, params);
+        } else {
+            deploymentController.runRemotely(mContext, location, task_name, resource_name, params);
+        }
     }
 
     public MobileNode getSelfNode(){

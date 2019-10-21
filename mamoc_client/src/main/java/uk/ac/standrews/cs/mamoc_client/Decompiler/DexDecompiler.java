@@ -121,7 +121,6 @@ public class DexDecompiler {
 
     private File getOutputDir(Context context){
 
-//        String packageName = context.getPackageName();
         String ExternalStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath();
 
         String folder_main ="mamoc";
