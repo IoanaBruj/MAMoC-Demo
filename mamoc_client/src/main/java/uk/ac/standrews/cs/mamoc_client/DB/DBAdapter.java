@@ -9,7 +9,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import uk.ac.standrews.cs.mamoc_client.Model.MobileNode;
-import uk.ac.standrews.cs.mamoc_client.Model.TaskExecution;
+import uk.ac.standrews.cs.mamoc_client.Model.Task;
 import uk.ac.standrews.cs.mamoc_client.Profilers.BatteryState;
 import uk.ac.standrews.cs.mamoc_client.Execution.ExecutionLocation;
 import uk.ac.standrews.cs.mamoc_client.Profilers.NetworkType;
@@ -44,7 +44,7 @@ public class DBAdapter {
         return instance;
     }
 
-    public void addTaskExecution(TaskExecution task){
+    public void addTaskExecution(Task task){
 
         Log.d(TAG, "inserting task to db: " + task.getTaskName());
 
@@ -61,11 +61,11 @@ public class DBAdapter {
         db.insert(TABLE_OFFLOAD, null, values);
     }
 
-    public ArrayList<TaskExecution> getExecutions(String taskName, boolean Remote){
+    public ArrayList<Task> getExecutions(Task task, boolean Remote){
 
-        Log.d(TAG, "Fetching " + (Remote?"remote":"local") + " executions: " + taskName);
+        Log.d(TAG, "Fetching " + (Remote?"remote":"local") + " executions: " + task.getTaskName());
 
-        ArrayList<TaskExecution> taskExecutions =  new ArrayList<>();
+        ArrayList<Task> taskExecutions =  new ArrayList<>();
 
         Cursor cursor = db.rawQuery("select * from " + TABLE_OFFLOAD,null);
 
@@ -82,8 +82,8 @@ public class DBAdapter {
             String name = cursor.getString(cursor.getColumnIndex(DBHelper.COL_TASK_NAME));
             if (Remote) {
                 // only fetch the executions where the commOverhead if greater than 0
-                if (name.equalsIgnoreCase(taskName) && cursor.getDouble(commIndex) > 0) {
-                    TaskExecution remote = new TaskExecution();
+                if (name.equalsIgnoreCase(task.getTaskName()) && cursor.getDouble(commIndex) > 0) {
+                    Task remote = new Task();
                     remote.setTaskName(cursor.getString(nameIndex));
                     remote.setExecLocation(ExecutionLocation.valueOf(cursor.getString(locationIndex)));
                     remote.setNetworkType(NetworkType.valueOf(cursor.getString(networkTypeIndex)));
@@ -97,8 +97,8 @@ public class DBAdapter {
                 }
             } else {
                 // only fetch the executions where the commOverhead is 0 (Local Execution)
-                if (name.equalsIgnoreCase(taskName) && cursor.getDouble(commIndex) == 0) {
-                    TaskExecution remote = new TaskExecution();
+                if (name.equalsIgnoreCase(task.getTaskName()) && cursor.getDouble(commIndex) == 0) {
+                    Task remote = new Task();
                     remote.setTaskName(cursor.getString(nameIndex));
                     remote.setExecLocation(ExecutionLocation.valueOf(cursor.getString(locationIndex)));
                     remote.setNetworkType(NetworkType.valueOf(cursor.getString(networkTypeIndex)));

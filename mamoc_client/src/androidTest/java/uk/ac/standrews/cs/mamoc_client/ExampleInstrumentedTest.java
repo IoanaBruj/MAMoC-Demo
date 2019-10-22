@@ -8,12 +8,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+
+import uk.ac.standrews.cs.mamoc_client.DecisionMaker.NodeOffloadingPercentage;
 import uk.ac.standrews.cs.mamoc_client.ServiceDiscovery.ServiceDiscovery;
 import uk.ac.standrews.cs.mamoc_client.Execution.ExecutionLocation;
 import uk.ac.standrews.cs.mamoc_client.Model.CloudNode;
 import uk.ac.standrews.cs.mamoc_client.Model.EdgeNode;
 import uk.ac.standrews.cs.mamoc_client.Model.MobileNode;
-import uk.ac.standrews.cs.mamoc_client.Model.TaskExecution;
+import uk.ac.standrews.cs.mamoc_client.Model.Task;
 
 import static org.junit.Assert.*;
 
@@ -65,11 +68,11 @@ public class ExampleInstrumentedTest {
         framework = MamocFramework.getInstance(appContext);
         framework.start();
 
-        TaskExecution task = new TaskExecution();
+        Task task = new Task();
         task.setTaskName("task1");
-        ExecutionLocation execLoc = framework.decisionEngine.makeDecision(task.getTaskName(), false);
 
-        assertEquals(execLoc.getValue(), "LOCAL");
+        framework.deploymentController.runLocally(task, "None");
+        assertSame(task.getExecLocation(), ExecutionLocation.LOCAL);
     }
 
     @Test
@@ -81,11 +84,11 @@ public class ExampleInstrumentedTest {
         en.setIp("192.168.0.12");
 
         framework.serviceDiscovery.addEdgeDevice(en);
-        TaskExecution task = new TaskExecution();
+        Task task = new Task();
         task.setTaskName("task2");
-        ExecutionLocation execLoc = framework.decisionEngine.makeDecision(task.getTaskName(), false);
+        ArrayList<NodeOffloadingPercentage> nodeOffPerc = framework.decisionEngine.makeDecision(task, false, 1,0);
 
-        assertEquals(execLoc.getValue(), "EDGE");
+        assertTrue(nodeOffPerc.get(0).getNode() instanceof EdgeNode);
     }
 
     // ServiceDiscovery Tests
@@ -100,13 +103,13 @@ public class ExampleInstrumentedTest {
     @Test
     public void stopConnectionListener() {
         framework.serviceDiscovery.stopConnectionListener();
-        assertEquals(framework.serviceDiscovery.isConnectionListenerRunning(), false);
+        assertFalse(framework.serviceDiscovery.isConnectionListenerRunning());
     }
 
     @Test
     public void startConnectionListener() {
         framework.serviceDiscovery.startConnectionListener();
-        assertEquals(framework.serviceDiscovery.isConnectionListenerRunning(), true);
+        assertTrue(framework.serviceDiscovery.isConnectionListenerRunning());
     }
 
     @Test

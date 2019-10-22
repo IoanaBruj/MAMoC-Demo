@@ -1,5 +1,6 @@
 package uk.ac.standrews.cs.mamoc_client;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Environment;
@@ -12,9 +13,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import uk.ac.standrews.cs.mamoc_client.Annotation.Offloadable;
+import uk.ac.standrews.cs.mamoc_client.Model.Task;
 import uk.ac.standrews.cs.mamoc_client.ServiceDiscovery.ServiceDiscovery;
 import uk.ac.standrews.cs.mamoc_client.DB.DBAdapter;
 import uk.ac.standrews.cs.mamoc_client.Decompiler.DexDecompiler;
@@ -60,7 +64,8 @@ public class MamocFramework {
         this.dbAdapter = DBAdapter.getInstance(mContext);
 
         // We need to perform class indexing and decompiling after a fresh install of the app
-        if (isFirstInstall(mContext)) {
+        // And skip it if instrument testing
+        if (isFirstInstall(mContext) && !isJUnitTest() ) {
             decompileAnnotatedClassFiles();
         }
 
@@ -181,12 +186,15 @@ public class MamocFramework {
     }
 
     public void execute(ExecutionLocation location, String task_name, String resource_name, Object... params) {
+        Task task = new Task();
+        task.setTaskName(task_name);
+
         if (location == ExecutionLocation.DYNAMIC){
-            deploymentController.runDynamically(mContext, task_name, resource_name, params);
+            deploymentController.runDynamically(mContext, task, resource_name, params);
         } else if (location == ExecutionLocation.LOCAL) {
-            deploymentController.runLocally(task_name, resource_name, params);
+            deploymentController.runLocally(task, resource_name, params);
         } else {
-            deploymentController.runRemotely(mContext, location, task_name, resource_name, params);
+            deploymentController.runRemotely(mContext, location, task, resource_name, params);
         }
     }
 
@@ -201,5 +209,14 @@ public class MamocFramework {
         selfNode.setIp(Utils.getIPAddress(true));
 
         return selfNode;
+    }
+
+    private static boolean isJUnitTest() {
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        for (StackTraceElement element : stackTrace)
+            if (element.getClassName().startsWith("org.junit.")) {
+                return true;
+            }
+        return false;
     }
 }

@@ -9,13 +9,12 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import uk.ac.standrews.cs.mamoc_client.Execution.ExecutionLocation;
 import uk.ac.standrews.cs.mamoc_client.MamocFramework;
 import uk.ac.standrews.cs.mamoc_client.Model.CloudNode;
 import uk.ac.standrews.cs.mamoc_client.Model.EdgeNode;
 import uk.ac.standrews.cs.mamoc_client.Model.MamocNode;
 import uk.ac.standrews.cs.mamoc_client.Model.MobileNode;
-import uk.ac.standrews.cs.mamoc_client.Model.TaskExecution;
+import uk.ac.standrews.cs.mamoc_client.Model.Task;
 import uk.ac.standrews.cs.mamoc_client.Profilers.BatteryState;
 
 public class DecisionEngine {
@@ -23,6 +22,7 @@ public class DecisionEngine {
     private static final String TAG = "DecisionEngine";
 
     private static DecisionEngine instance;
+
     // TODO: set these values dynamically based on past offloading data and number of checks performed
     private final int MAX_REMOTE_EXECUTIONS = 5;
     private final int MAX_LOCAL_EXECUTIONS = 5;
@@ -30,11 +30,9 @@ public class DecisionEngine {
     private Context mContext;
     private MamocFramework framework;
 
+    // MCDM classes
     private AHP ahp;
     private Topsis topsis;
-
-    private double executionWeight;
-    private double energyWeight;
 
     private DecisionEngine(Context context) {
         this.mContext = context;
@@ -52,89 +50,79 @@ public class DecisionEngine {
         return instance;
     }
 
+    public ArrayList<NodeOffloadingPercentage> makeDecision(Task task, Boolean isParallel, double executionWeight, double energyWeight) {
 
-    public ArrayList<NodeOffloadingPercentage> makeDecision(String taskName, Boolean isParallel) {
-
-        Log.d(TAG, "making offloading decision for: " + taskName);
+        Log.d(TAG, "making offloading decision for: " + task.getTaskName());
 
         ArrayList<MamocNode> sites = getAvailableSites();
         ArrayList<NodeOffloadingPercentage> nodeOffPerc = new ArrayList<>();
 
-        if (executionWeight == 1){
-            nodeOffPerc = scorePartitioner(sites);
-        }
-        else{
-            nodeOffPerc = performMCDM(sites);
-        }
-
         int localExecs, remoteExecs;
 
-        ArrayList<TaskExecution> remoteTaskExecutions = framework.dbAdapter.getExecutions(taskName, true);
+        ArrayList<Task> remoteTaskExecutions = framework.dbAdapter.getExecutions(task, true);
         remoteExecs = remoteTaskExecutions.size();
 
         Log.d(TAG, "Remote execs: " + remoteExecs);
 
-        ArrayList<TaskExecution> localTaskExecutions = framework.dbAdapter.getExecutions(taskName, false);
+        ArrayList<Task> localTaskExecutions = framework.dbAdapter.getExecutions(task, false);
         localExecs = localTaskExecutions.size();
 
         Log.d(TAG, "Local execs: " + localExecs);
+
         Log.d(TAG, "Last Execution: " + framework.lastExecution);
 
-        HashMap<MamocNode, ArrayList<Fuzzy>> S = profileAvailableSites();
-
         // more than 5 local executions of the task - let's check if local is still better
-        if (localExecs % MAX_LOCAL_EXECUTIONS == 0){
+        // OR check if the task has previously been offloaded, if not, let's do some remote offloading to record their execution times
+        if (localExecs % MAX_LOCAL_EXECUTIONS == 0 || remoteExecs == 0){
             Log.d(TAG, "MAX LOCAL EXECUTIONS REACHED");
-
-                return getNodeWithMaxOffloadingScore();
-            }
+            return decideOffloading(sites, executionWeight, energyWeight);
         }
 
-        // more than 5 remote executions of the task - let's recalculate offloading scores
-        // and double check if it is still worth offloading
-        if (remoteExecs % MAX_REMOTE_EXECUTIONS == 0){
+        // more than 5 remote executions of the task - let's recalculate offloading scores and double check if it is still worth offloading
+        if (remoteExecs % MAX_REMOTE_EXECUTIONS == 0 || localExecs == 0){
             Log.d(TAG, "MAX REMOTE EXECUTIONS REACHED");
 
             double localExecTime = 0;
             double remoteExecTime = 0;
 
-            if (localExecs != 0) {
-                Log.d(TAG, "The last executed local execution time: " + localTaskExecutions.get(localExecs-1).getExecutionTime());
-                localExecTime = localTaskExecutions.get(localExecs-1).getExecutionTime();
-            }
+            localExecTime = localTaskExecutions.get(localExecs-1).getExecutionTime();
+            Log.d(TAG, "The last executed local execution time: " + localExecTime);
 
-            if (remoteExecs != 0) {
-                Log.d(TAG, "The last executed remote execution time: " + remoteTaskExecutions.get(remoteExecs - 1).getExecutionTime());
-                remoteExecTime = remoteTaskExecutions.get(remoteExecs - 1).getExecutionTime();
-            }
+            remoteExecTime = remoteTaskExecutions.get(remoteExecs - 1).getExecutionTime();
+            Log.d(TAG, "The last executed remote execution time: " + remoteExecTime);
 
             // Compare the last local execution with the last remote execution
-            // OR if there is no local Execution at all
-            if (localExecTime < remoteExecTime || localExecs == 0){
+            if (localExecTime < remoteExecTime){
                 framework.lastExecution = "Local";
-                return ExecutionLocation.LOCAL;
+                nodeOffPerc.add(new NodeOffloadingPercentage(framework.getSelfNode(), 100.0));
+                return nodeOffPerc;
             } else {
-                return getNodeWithMaxOffloadingScore();
+                return decideOffloading(sites, executionWeight, energyWeight);
             }
-        }
-
-        // check if the task has previously been offloaded, if not, let's do some remote offloading
-        // to record their execution times
-        if (remoteExecs == 0) {
-            Log.d(TAG, "No remote executions exist");
-            return getNodeWithMaxOffloadingScore();
-        }
-
-        // For all other normal remote executions
-        if (remoteExecs % MAX_REMOTE_EXECUTIONS != 0 && framework.lastExecution.equals("Remote")) {
-            return getNodeWithMaxOffloadingScore();
         }
 
         // For all other normal local executions
-        return ExecutionLocation.LOCAL;
+        framework.lastExecution = "Local";
+        nodeOffPerc.add(new NodeOffloadingPercentage(framework.getSelfNode(), 100.0));
+        return nodeOffPerc;
     }
 
+    private ArrayList<NodeOffloadingPercentage> decideOffloading(ArrayList<MamocNode> sites, double executionWeight, double energyWeight) {
 
+        // Only execution speed matters, use offloading scores
+        if (executionWeight == 1){
+            return scorePartitioner(sites);
+        }
+        // execution and energy, use MCDM
+        else{
+            return multicriteriaSolver(sites);
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
     private ArrayList<MamocNode> getAvailableSites() {
 
         ArrayList<MamocNode> availableNodes = new ArrayList<>();
@@ -150,6 +138,50 @@ public class DecisionEngine {
         return availableNodes;
     }
 
+    /**
+     *
+     * @param sites
+     * @return
+     */
+    private ArrayList<NodeOffloadingPercentage> scorePartitioner(ArrayList<MamocNode> sites) {
+
+        ArrayList<NodeOffloadingPercentage> nodeOffPerct = new ArrayList<>();
+        double totalScore = 0;
+
+        for (MamocNode site : sites) {
+            totalScore += site.getOffloadingScore();
+        }
+
+        for (MamocNode site : sites) {
+            nodeOffPerct.add(new NodeOffloadingPercentage(site, site.getOffloadingScore() / totalScore));
+        }
+
+        return nodeOffPerct;
+    }
+
+    private ArrayList<NodeOffloadingPercentage> multicriteriaSolver(ArrayList<MamocNode> sites) {
+        Log.d(TAG, "multicriteriaSolver: Available offloading sites: " + sites.size());
+
+        ArrayList<NodeOffloadingPercentage> nodeOffPercList = new ArrayList<>();
+
+        // Profile the nodes to generate the Fuzzy values
+        HashMap<MamocNode, ArrayList<Fuzzy>> profiledSites = profileAvailableSites(sites);
+
+        // Calculate the weighted decision matrix
+        TreeMap<MamocNode, Double> ranking = performMCDMEvaluation(profiledSites);
+
+        for (Map.Entry<MamocNode, Double> entry : ranking.entrySet()) {
+            nodeOffPercList.add(new NodeOffloadingPercentage(entry.getKey(), entry.getValue()));
+        }
+
+        return nodeOffPercList;
+    }
+
+    /**
+     *
+     * @param nodes
+     * @return
+     */
     private HashMap<MamocNode, ArrayList<Fuzzy>> profileAvailableSites(ArrayList<MamocNode> nodes) {
 
         HashMap<MamocNode, ArrayList<Fuzzy>> availableSites = new HashMap<>();
@@ -157,57 +189,12 @@ public class DecisionEngine {
         ArrayList<Fuzzy> criteriaImportance;
 
         for (MamocNode node : nodes) {
-//            Log.d(TAG, "Mobile node: " + node.getNodeName() + " " + node.getIp());
+            Log.d(TAG, "Profiling node: " + node.getNodeName() + " " + node.getIp());
             criteriaImportance = profileNode(node);
             availableSites.put(node, criteriaImportance);
         }
 
         return availableSites;
-    }
-
-    private ExecutionLocation getNodeWithMaxOffloadingScore() {
-
-       framework.lastExecution = "Remote";
-
-        // Calculate the weighted decision matrix
-        TreeMap<MamocNode, Double> ranking = performEvaluation(availableSites);
-
-        // Simulate a low offloading score node
-        MamocNode maxNode = new MamocNode();
-        maxNode.setOffloadingScore(0);
-
-        for (Map.Entry<MamocNode,Double> entry: ranking.entrySet()) {
-            if (entry.getValue() > maxNode.getOffloadingScore()){
-                maxNode =entry.getKey();
-            }
-        }
-
-        if (maxNode instanceof MobileNode) {
-            return ExecutionLocation.D2D;
-        } else if (maxNode instanceof EdgeNode) {
-            return ExecutionLocation.EDGE;
-        } else if (maxNode instanceof CloudNode) {
-            return ExecutionLocation.PUBLIC_CLOUD;
-        } else {
-            // This should not happen
-            return ExecutionLocation.LOCAL;
-        }
-
-    }
-
-    private ArrayList<NodeOffloadingPercentage> mcdmSolver(ArrayList<MamocNode> availableSites) {
-        Log.d(TAG, "Available offloading sites: " + availableSites.size());
-
-        ArrayList<NodeOffloadingPercentage> nodeOffPercList = new ArrayList<>();
-
-        // Calculate the weighted decision matrix
-        TreeMap<MamocNode, Double> ranking = performMCDMEvaluation(availableSites);
-
-        for (Map.Entry<MamocNode, Double> entry : ranking.entrySet()) {
-            nodeOffPercList.add(new NodeOffloadingPercentage(entry.getKey(), entry.getValue()));
-        }
-
-        return nodeOffPercList;
     }
 
     private ArrayList<Fuzzy> profileNode(MamocNode node) {
@@ -286,7 +273,7 @@ public class DecisionEngine {
         else {
             // TODO: get resource monitoring data from the server and set the importance accordingly
             // Edge device
-            if (node.getIp().startsWith("192")) { // DIRTY HACK
+            if (node instanceof EdgeNode) {
                 siteCriteria.add(Fuzzy.VERY_HIGH); // Bandwidth
                 siteCriteria.add(Fuzzy.HIGH);   // Speed
                 siteCriteria.add(Fuzzy.HIGH);   // Availability
@@ -295,11 +282,11 @@ public class DecisionEngine {
             }
             // Public cloud instance
             else {
-                siteCriteria.add(Fuzzy.LOW); // Bandwidth
-                siteCriteria.add(Fuzzy.VERY_HIGH); // Speed
-                siteCriteria.add(Fuzzy.VERY_HIGH); // Availability
-                siteCriteria.add(Fuzzy.GOOD); // Security
-                siteCriteria.add(Fuzzy.VERY_HIGH); // Price
+                siteCriteria.add(Fuzzy.LOW);    // Bandwidth
+                siteCriteria.add(Fuzzy.VERY_HIGH);  // Speed
+                siteCriteria.add(Fuzzy.VERY_HIGH);  // Availability
+                siteCriteria.add(Fuzzy.GOOD);   // Security
+                siteCriteria.add(Fuzzy.VERY_HIGH);  // Price
             }
         }
 
@@ -308,11 +295,12 @@ public class DecisionEngine {
 
     private TreeMap<MamocNode, Double> performMCDMEvaluation(HashMap<MamocNode, ArrayList<Fuzzy>> availableSites){
 
+        Log.d(TAG, "************** MCDM AHP ******************");
         Log.d(TAG, "Calculating AHP Criteria weighting: ");
-        AHP ahp = new AHP(Config.criteria);
+        ahp = new AHP(Config.criteria);
         ahp.calculateAHP();
 
-        Log.d(TAG, "********************************");
+        Log.d(TAG, "**************** MCDM TOPSIS ****************");
         Log.d(TAG, "Calculating Fuzzy TOPSIS: ");
 
         topsis = new Topsis();
