@@ -15,7 +15,6 @@ import uk.ac.standrews.cs.mamoc_client.Model.EdgeNode;
 import uk.ac.standrews.cs.mamoc_client.Model.MamocNode;
 import uk.ac.standrews.cs.mamoc_client.Model.MobileNode;
 import uk.ac.standrews.cs.mamoc_client.Model.Task;
-import uk.ac.standrews.cs.mamoc_client.Profilers.BatteryState;
 
 public class DecisionEngine {
 
@@ -50,6 +49,16 @@ public class DecisionEngine {
         return instance;
     }
 
+    /**
+     * This is the core method of offload decision making. It fetches a list of past task executions from
+     * the DBAdapter and decides to execute the task locally or remotely according to the task offlad decision
+     * making algorithm
+     * @param task the received offloadable task
+     * @param isParallel whether the task can be parallalized
+     * @param executionWeight the weight given to execution (0-1)
+     * @param energyWeight the weight given to energy (0-1)
+     * @return List of [Node:OffloadingPercentage] to be used by the Deployment Controller
+     */
     public ArrayList<NodeOffloadingPercentage> makeDecision(Task task, Boolean isParallel, double executionWeight, double energyWeight) {
 
         Log.d(TAG, "making offloading decision for: " + task.getTaskName());
@@ -107,6 +116,13 @@ public class DecisionEngine {
         return nodeOffPerc;
     }
 
+    /**
+     * This method is called when it is decided to offload the task for remote execution
+     * @param sites the list of available sites
+     * @param executionWeight the weight given to execution (0-1)
+     * @param energyWeight the weight given to energy (0-1)
+     * @return A list of [Node:OffloadingPercentage] from @scorePartitioner or @multicriteriaSolver
+     */
     private ArrayList<NodeOffloadingPercentage> decideOffloading(ArrayList<MamocNode> sites, double executionWeight, double energyWeight) {
 
         // Only execution speed matters, use offloading scores
@@ -120,8 +136,8 @@ public class DecisionEngine {
     }
 
     /**
-     *
-     * @return
+     * Communicates with the service discovery component to give a list of discovered and connected nodes
+     * @return List of nodes
      */
     private ArrayList<MamocNode> getAvailableSites() {
 
@@ -139,9 +155,9 @@ public class DecisionEngine {
     }
 
     /**
-     *
-     * @param sites
-     * @return
+     * Uses the offloading score to generate the [Node:OffloadingPercentage]
+     * @param sites list of nodes
+     * @return [Node:OffloadingPercentage]
      */
     private ArrayList<NodeOffloadingPercentage> scorePartitioner(ArrayList<MamocNode> sites) {
 
@@ -159,6 +175,11 @@ public class DecisionEngine {
         return nodeOffPerct;
     }
 
+    /**
+     *  Uses MCDM to evaluate different criteria and rank the available nodes
+     * @param sites list of nodes
+     * @return [Node:OffloadingPercentage]
+     */
     private ArrayList<NodeOffloadingPercentage> multicriteriaSolver(ArrayList<MamocNode> sites) {
         Log.d(TAG, "multicriteriaSolver: Available offloading sites: " + sites.size());
 
@@ -178,9 +199,9 @@ public class DecisionEngine {
     }
 
     /**
-     *
-     * @param nodes
-     * @return
+     * Perform profiling the available nodes
+     * @param nodes list of nodes
+     * @return A map of the nodes with their respective fuzzy values generated from @profileNode
      */
     private HashMap<MamocNode, ArrayList<Fuzzy>> profileAvailableSites(ArrayList<MamocNode> nodes) {
 
@@ -197,6 +218,11 @@ public class DecisionEngine {
         return availableSites;
     }
 
+    /**
+     * Generates a list of fuzzy values for each nodes based on the profiling information
+     * @param node A MAMoC node to be profiled
+     * @return Fuzzy values list for the node
+     */
     private ArrayList<Fuzzy> profileNode(MamocNode node) {
 
         Log.d(TAG, "Profiling " + node.getNodeName() + " - " + node.getIp());
@@ -247,8 +273,7 @@ public class DecisionEngine {
             }
 
             // check the battery level for availability
-            BatteryState state = framework.deviceProfiler.isDeviceCharging();
-            if (state == BatteryState.CHARGING) {
+            if (framework.deviceProfiler.isDeviceCharging().getValue() == 100) {
                 battery = 100;
             } else {
                 battery = (100 - framework.deviceProfiler.fetchBatteryLevel());
@@ -293,6 +318,11 @@ public class DecisionEngine {
         return siteCriteria;
     }
 
+    /**
+     * The AHP and TOPSIS methods to evaluate the criteria and generate the ranking of the nodes
+     * @param availableSites list of nodes
+     * @return A map of the weighted decision matrix for each node
+     */
     private TreeMap<MamocNode, Double> performMCDMEvaluation(HashMap<MamocNode, ArrayList<Fuzzy>> availableSites){
 
         Log.d(TAG, "************** MCDM AHP ******************");
