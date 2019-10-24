@@ -41,11 +41,11 @@ public class SortingActivity extends DemoBaseActivity {
         radioGroup = findViewById(R.id.fileSizeRadioGroup);
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if(checkedId == R.id.smallFileRadioButton) {
-                fileSize = "small";
+                fileSize = "small.txt";
             } else if(checkedId == R.id.mediumFileRadioButton) {
-                fileSize = "medium";
+                fileSize = "medium.txt";
             } else {
-                fileSize = "large";
+                fileSize = "large.txt";
             }
         });
 
