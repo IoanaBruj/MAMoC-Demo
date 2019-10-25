@@ -21,79 +21,85 @@
         android:id="@+id/mandelBrotEditText"
         android:layout_width="368dp"
         android:layout_height="0dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="16dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="Enter N (Default:13) "
         android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="22dp" />
 
     <Button
         android:id="@+id/buttonLocal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="68dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/local"
-        app:layout_constraintBaseline_toBaselineOf="@+id/buttonEdge"
-        app:layout_constraintEnd_toStartOf="@+id/buttonEdge"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/buttonNearby"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mandelBrotEditText" />
 
     <Button
         android:id="@+id/buttonEdge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
+        android:layout_width="70dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="9dp"
         android:text="@string/edge"
         app:layout_constraintEnd_toStartOf="@+id/buttonCloud"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonLocal"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/mandelBrotEditText" />
+
+    <Button
+        android:id="@+id/buttonNearby"
+        android:layout_width="79dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="9dp"
+        android:text="@string/nearby"
+        app:layout_constraintEnd_toStartOf="@+id/buttonEdge"
+        app:layout_constraintTop_toBottomOf="@+id/mandelBrotEditText" />
 
     <Button
         android:id="@+id/buttonCloud"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="74dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/cloud"
-        app:layout_constraintBaseline_toBaselineOf="@+id/buttonEdge"
         app:layout_constraintEnd_toStartOf="@+id/buttonMamoc"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonEdge" />
+        app:layout_constraintTop_toBottomOf="@+id/mandelBrotEditText" />
 
     <Button
         android:id="@+id/buttonMamoc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="82dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/mamoc"
-        app:layout_constraintBaseline_toBaselineOf="@+id/buttonCloud"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonCloud" />
+        app:layout_constraintTop_toBottomOf="@+id/mandelBrotEditText" />
 
     <TextView
         android:id="@+id/sortOutput"
         android:layout_width="354dp"
         android:layout_height="0dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@android:color/darker_gray"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonMamoc"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonEdge" />
 
     <android.support.constraint.Group
         android:id="@+id/group"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"

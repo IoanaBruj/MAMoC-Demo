@@ -1,20 +1,14 @@
 package uk.ac.standrews.cs.mamoc_client;
 
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.util.Log;
 
 import org.atteo.classindex.ClassIndex;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 import uk.ac.standrews.cs.mamoc_client.Annotation.Offloadable;
@@ -109,15 +103,22 @@ public class MamocFramework {
 //        return mamocDir.exists();
 //    }
 
-    private static boolean isFirstInstall(Context context) {
-        try {
-            long firstInstallTime = context.getPackageManager().getPackageInfo(BuildConfig.APPLICATION_ID, 0).firstInstallTime;
-            long lastUpdateTime = context.getPackageManager().getPackageInfo(BuildConfig.APPLICATION_ID, 0).lastUpdateTime;
-            return firstInstallTime == lastUpdateTime;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+    private boolean isFirstInstall(Context context) {
+        final String PREFS_NAME = "MamocPrefs";
+
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+
+        if (settings.getBoolean("my_first_time", true)) {
+            //the app is being launched for first time, do something
+            Log.d(TAG, "First time");
+
+            // record the fact that the app has been started at least once
+            settings.edit().putBoolean("my_first_time", false).apply();
+
             return true;
         }
+
+        return false;
     }
 
 //    private void findOffloadableTasks() {
@@ -194,7 +195,7 @@ public class MamocFramework {
         } else if (location == ExecutionLocation.LOCAL) {
             deploymentController.runLocally(task, resource_name, params);
         } else {
-            deploymentController.runRemotely(mContext, location, task, resource_name, params);
+            deploymentController.executeRemotely(mContext, location, task, resource_name, params);
         }
     }
 

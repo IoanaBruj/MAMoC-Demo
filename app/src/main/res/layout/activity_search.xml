@@ -20,95 +20,95 @@
     <EditText
         android:id="@+id/searchEditText"
         android:layout_width="368dp"
-        android:layout_height="0dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="1dp"
         android:ems="10"
         android:hint="Enter Search Keyword"
         android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/fileSizeRadioGroup"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonLocal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/local"
-        app:layout_constraintEnd_toStartOf="@+id/buttonEdge"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/buttonCloud"
+        android:layout_width="75dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:text="@string/cloud"
+        app:layout_constraintEnd_toStartOf="@+id/buttonMamoc"
         app:layout_constraintTop_toBottomOf="@+id/fileSizeRadioGroup" />
 
     <Button
         android:id="@+id/buttonEdge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="70dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
         android:text="@string/edge"
         app:layout_constraintEnd_toStartOf="@+id/buttonCloud"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonLocal"
         app:layout_constraintTop_toBottomOf="@+id/fileSizeRadioGroup" />
 
     <Button
-        android:id="@+id/buttonCloud"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/cloud"
-        app:layout_constraintEnd_toStartOf="@+id/buttonMamoc"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonEdge"
+        android:id="@+id/buttonNearby"
+        android:layout_width="80dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:text="@string/nearby"
+        app:layout_constraintEnd_toStartOf="@+id/buttonEdge"
+        app:layout_constraintTop_toBottomOf="@+id/fileSizeRadioGroup" />
+
+    <Button
+        android:id="@+id/buttonLocal"
+        android:layout_width="80dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="3dp"
+        android:text="@string/local"
+        app:layout_constraintEnd_toStartOf="@+id/buttonNearby"
+        app:layout_constraintHorizontal_bias="0.166"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fileSizeRadioGroup" />
 
     <Button
         android:id="@+id/buttonMamoc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="104dp"
-        android:layout_marginEnd="12dp"
+        android:layout_width="80dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
         android:text="@string/mamoc"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonCloud"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/fileSizeRadioGroup" />
 
     <TextView
         android:id="@+id/sortOutput"
-        android:layout_width="0dp"
+        android:layout_width="383dp"
         android:layout_height="0dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@android:color/darker_gray"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonMamoc"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonMamoc" />
 
     <RadioGroup
         android:id="@+id/fileSizeRadioGroup"
-        android:layout_width="0dp"
+        android:layout_width="395dp"
         android:layout_height="42dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/buttonMamoc"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/searchEditText"
+        tools:layout_editor_absoluteX="9dp">
 
         <RadioButton
             android:id="@+id/smallFileRadioButton"
@@ -141,11 +141,7 @@
     <android.support.constraint.Group
         android:id="@+id/group"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
@@ -157,9 +153,5 @@
     <android.support.constraint.Group
         android:id="@+id/group2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content" />
 </android.support.constraint.ConstraintLayout>
