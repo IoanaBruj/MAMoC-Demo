@@ -9,8 +9,8 @@ public class Constants {
 
     public static final String DB_NAME = "mamoc.db";
 
-    public static String EDGE_IP = "ws://192.168.0.12:8080/ws";
-//    public static String EDGE_IP = "djs21.host.cs.st-andrews.ac.uk/offload/ws/"; // Change it to student host server for edge server
+//    public static String EDGE_IP = "ws://192.168.0.12:8080/ws";
+    public static String EDGE_IP = "djs21.host.cs.st-andrews.ac.uk/offload/ws/"; // Change it to student host server for edge server
 
     public static final String EDGE_REALM_NAME = "mamoc_realm";
 
@@ -23,7 +23,7 @@ public class Constants {
     public static final String SENDING_FILE_PUB = "uk.ac.standrews.cs.mamoc.receive_file";
     public static final String OFFLOADING_RESULT_SUB = "uk.ac.standrews.cs.mamoc.offloadingresult";
 
-    public static final String SERVICE_DISCOVERY_BROADCASTER = "servicediscovery";
+    public static final String SERVICE_DISCOVERY_BROADCASTER = "service_discovery";
 
     public static final int PING = 11;
     public static final int PONG = 12;

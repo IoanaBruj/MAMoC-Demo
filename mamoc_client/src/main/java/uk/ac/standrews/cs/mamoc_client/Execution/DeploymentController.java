@@ -268,22 +268,22 @@ public class DeploymentController {
                     try {
 
                         // publish the dependent resource file for the task
-                        if (resource_name != null) {
-                            // publish the necessary resource files
-                            CompletableFuture<Publication> pubFuture = node.session.publish(
-                                    SENDING_FILE_PUB,
-                                    "Android",
-                                    resource_name,
-                                    readFromAssets(mContext, resource_name));
-                            pubFuture.thenAccept(publication -> Log.d("publishResult",
-                                    resource_name + " published successfully"));
-                            // Shows we can separate out exception handling
-                            pubFuture.exceptionally(throwable -> {
-                                Log.e(TAG, "Failed to publish resource file");
-                                throwable.printStackTrace();
-                                return null;
-                            });
-                        }
+//                        if (resource_name != null) {
+//                            // publish the necessary resource files
+//                            CompletableFuture<Publication> pubFuture = node.session.publish(
+//                                    SENDING_FILE_PUB,
+//                                    "Android",
+//                                    resource_name,
+//                                    readFromAssets(mContext, resource_name));
+//                            pubFuture.thenAccept(publication -> Log.d("publishResult",
+//                                    resource_name + " published successfully"));
+//                            // Shows we can separate out exception handling
+//                            pubFuture.exceptionally(throwable -> {
+//                                Log.e(TAG, "Failed to publish resource file");
+//                                throwable.printStackTrace();
+//                                return null;
+//                            });
+//                        }
 
                         String sourceCode = framework.fetchSourceCode(task.getTaskName());
 
