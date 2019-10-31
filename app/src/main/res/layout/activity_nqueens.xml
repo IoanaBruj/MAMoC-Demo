@@ -26,8 +26,10 @@
         android:ems="10"
         android:hint="Enter N (Default:13) "
         android:inputType="text"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="22dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonLocal"
@@ -38,6 +40,7 @@
         android:layout_marginEnd="8dp"
         android:text="@string/local"
         app:layout_constraintEnd_toStartOf="@+id/buttonNearby"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mandelBrotEditText" />
 
@@ -49,6 +52,8 @@
         android:layout_marginEnd="9dp"
         android:text="@string/edge"
         app:layout_constraintEnd_toStartOf="@+id/buttonCloud"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonNearby"
         app:layout_constraintTop_toBottomOf="@+id/mandelBrotEditText" />
 
     <Button
@@ -59,6 +64,8 @@
         android:layout_marginEnd="9dp"
         android:text="@string/nearby"
         app:layout_constraintEnd_toStartOf="@+id/buttonEdge"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonLocal"
         app:layout_constraintTop_toBottomOf="@+id/mandelBrotEditText" />
 
     <Button
@@ -69,6 +76,8 @@
         android:layout_marginEnd="8dp"
         android:text="@string/cloud"
         app:layout_constraintEnd_toStartOf="@+id/buttonMamoc"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonEdge"
         app:layout_constraintTop_toBottomOf="@+id/mandelBrotEditText" />
 
     <Button
@@ -79,11 +88,13 @@
         android:layout_marginEnd="8dp"
         android:text="@string/mamoc"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonCloud"
         app:layout_constraintTop_toBottomOf="@+id/mandelBrotEditText" />
 
     <TextView
         android:id="@+id/sortOutput"
-        android:layout_width="354dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -93,6 +104,7 @@
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonEdge" />
 

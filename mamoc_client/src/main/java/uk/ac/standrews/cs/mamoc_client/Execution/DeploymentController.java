@@ -475,8 +475,6 @@ public class DeploymentController {
 
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
-        Log.d(TAG, "insert it???");
-
         task.setExecutionTime(executionTime);
         task.setCommOverhead(commOverhead);
         task.setCompleted(true);
