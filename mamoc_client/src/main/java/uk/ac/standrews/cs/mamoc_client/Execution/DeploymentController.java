@@ -7,6 +7,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -163,7 +165,7 @@ public class DeploymentController {
 
         Log.d(TAG, "running " + t.getTaskName() + " dynamically");
 
-        ArrayList<NodeOffloadingPercentage> nodeOffPerc = framework.decisionEngine.makeDecision(t, false, 1, 0);
+        ArrayList<NodeOffloadingPercentage> nodeOffPerc = framework.decisionEngine.makeDecision(t, false, 0.5, 0.5);
 
         if (nodeOffPerc.size() == 1 && nodeOffPerc.get(0).getNode() == framework.getSelfNode()){
             runLocally(t, resource_name, params);
@@ -252,10 +254,11 @@ public class DeploymentController {
                     } else {
                         // Something went bad.
                         throwable.printStackTrace();
-//                    task.setCompleted(false);
-//                    addExecutionEntry(task);
+                        task.setCompleted(false);
+                        addExecutionEntry(task);
                     }
                 });
+
             // check if procedure is registered
             CompletableFuture<CallResult> registeredFuture = node.session.call(WAMP_LOOKUP, task.getTaskName());
 
@@ -315,13 +318,19 @@ public class DeploymentController {
 
                     CompletableFuture<CallResult> callFuture;
 
-                    if (resource_name != null) {
-                        callFuture = node.session.call(
-                                task.getTaskName(), resource_name, params);
-                    } else{
-                        callFuture = node.session.call(
-                                task.getTaskName(), params);
+                    // We will handle the resource name being null in mamoc server to keep the RPC calls standard across different tasks
+//                    if (resource_name != null) {
+
+                    try {
+                        node.session.call(task.getTaskName(), resource_name, params);
+                    } catch (Exception e) {
+                        Log.e(TAG, "exception in RPC call: " + e.getMessage());
+                        task.setCompleted(false);
                     }
+//                    } else{
+//                        callFuture = node.session.call(
+//                                task.getTaskName(), params);
+//                    }
 
 //                    callFuture.thenAccept(callResult -> {
 //                        List<Object> results = (List) callResult.results.get(0);

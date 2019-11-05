@@ -86,7 +86,7 @@ public class SearchActivity extends DemoBaseActivity {
 
         keyword = keywordTextView.getText().toString();
 
-        if (keyword == null || keyword.isEmpty()){
+        if (keyword.isEmpty()){
             Toast.makeText(this, "Please enter a keyword", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -104,8 +104,8 @@ public class SearchActivity extends DemoBaseActivity {
             case DYNAMIC:
                 if (runOnce) {
                     runDynamically(keyword);
-                } else{ // for running it 30 times and averaging the results
-                    for (int i=0;i<30;i++){
+                } else{ // for running it 10 times and averaging the results
+                    for (int i=0;i<10;i++){
                         runDynamically(keyword);
                         Log.d(task_name, "Running " + i+1 + "th time: ");
                     }
