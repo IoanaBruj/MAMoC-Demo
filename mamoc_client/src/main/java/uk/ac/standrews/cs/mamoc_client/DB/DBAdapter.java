@@ -233,8 +233,13 @@ public class DBAdapter {
     private boolean deviceExists(String ip) {
         Cursor cursor = db.query(TABLE_MOBILE_DEVICES, null, DBHelper.COL_DEV_IP + "=?", new
                 String[]{ip}, null, null, null);
+        int count = cursor.getCount();
 
-        return (cursor.getCount() > 0);
+        if (!cursor.isClosed()) {
+            cursor.close();
+        }
+
+        return count > 0;
     }
 
     public int clearTable(String tableName) {

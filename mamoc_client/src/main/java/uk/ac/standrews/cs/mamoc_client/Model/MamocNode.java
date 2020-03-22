@@ -2,7 +2,7 @@ package uk.ac.standrews.cs.mamoc_client.Model;
 
 import java.io.Serializable;
 
-public class MamocNode implements Serializable {
+public abstract class MamocNode implements Serializable {
 
     private String nodeName;
     private String ip;
