@@ -8,7 +8,7 @@ public class QuickSort {
     private String content;
     private String[] strArr;
 
-    private static final String BLANK_SPACE=" ";
+    private static final String BLANK_SPACE = " ";
 
     public QuickSort(String words) {
         this.content = words;
@@ -19,13 +19,12 @@ public class QuickSort {
         quickSort(strArr, 0, strArr.length - 1);
     }
 
-    private String[] quickSort(String[] strArr, int p, int r){
+    private String[] quickSort(String[] strArr, int p, int r) {
 
-        if(p<r)
-        {
-            int q=partition(strArr,p,r);
-            quickSort(strArr,p,q);
-            quickSort(strArr,q+1,r);
+        if (p < r) {
+            int q = partition(strArr, p, r);
+            quickSort(strArr, p, q);
+            quickSort(strArr, q + 1, r);
         }
 
         return strArr;
@@ -34,16 +33,15 @@ public class QuickSort {
     private static int partition(String[] strArr, int p, int r) {
 
         String x = strArr[p];
-        int i = p-1 ;
-        int j = r+1 ;
+        int i = p - 1;
+        int j = r + 1;
 
-        while (true)
-        {
+        while (true) {
             i++;
-            while ( i< r && strArr[i].compareTo(x) < 0)
+            while (i < r && strArr[i].compareTo(x) < 0)
                 i++;
             j--;
-            while (j>p && strArr[j].compareTo(x) > 0)
+            while (j > p && strArr[j].compareTo(x) > 0)
                 j--;
 
             if (i < j)
@@ -53,8 +51,7 @@ public class QuickSort {
         }
     }
 
-    private static void swap(String[] strArr, int i, int j)
-    {
+    private static void swap(String[] strArr, int i, int j) {
         String temp = strArr[i];
         strArr[i] = strArr[j];
         strArr[j] = temp;

@@ -175,6 +175,13 @@ public class MamocFramework {
         }
     }
 
+    public void execute(ExecutionLocation location, String task_name, int number, Object... params) {
+        Task task = new Task();
+        task.setTaskName(task_name);
+
+        deploymentController.runLocally(task, number, params);
+    }
+
     public MobileNode getSelfNode(){
         selfNode = new MobileNode(mContext);
 

@@ -93,7 +93,7 @@ public class DeploymentController {
             Constructor<?> constructor;
             Object instance;
 
-            if (resource_name != null){
+            if (resource_name != null) {
                 String fileContent = getContentFromTextFile(resource_name);
 
                 // create a new parameters array with the file content appended to it
@@ -113,12 +113,67 @@ public class DeploymentController {
             Object result = runMethod.invoke(instance);
 
             // if nothing is returned from the execution
-            if (result == null){
+            if (result == null) {
                 result = "Nothing";
             }
 
             endSendingTime = System.nanoTime();
-            double executionTime = (double)(endSendingTime - startSendingTime) * 1.0e-9;
+            double executionTime = (double) (endSendingTime - startSendingTime) * 1.0e-9;
+
+            broadcastLocalResults(result, executionTime);
+
+            task.setExecutionTime(executionTime);
+            addExecutionEntry(task);
+
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |
+                InstantiationException | InvocationTargetException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void runLocally(Task t, int fileSize, Object... params) {
+        Log.d(TAG, "running " + t.getTaskName() + " locally");
+
+        task = new Task();
+        task.setTaskName(t.getTaskName());
+        task.setExecLocation(ExecutionLocation.LOCAL);
+        task.setCommOverhead(0.0);
+        task.setNetworkType(framework.networkProfiler.getNetworkType());
+        task.setExecutionDate(System.currentTimeMillis());
+
+        startSendingTime = System.nanoTime();
+
+        try {
+            Class<?> cls = Class.forName(task.getTaskName());
+            Constructor<?> constructor;
+            Object instance;
+
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < fileSize; i++) {
+                stringBuilder.append("hi, we are searching in this text with a multiple hello and hi and hello ");
+            }
+            String fileContent = stringBuilder.toString();
+
+            // create a new parameters array with the file content appended to it
+            Object[] newParams = new Object[params.length + 1];
+            newParams[0] = fileContent;
+            System.arraycopy(params, 0, newParams, 1, params.length);
+
+            constructor = getAppropriateConstructor(cls, newParams);
+            instance = constructor.newInstance(newParams);
+
+            Method runMethod = instance.getClass().getMethod("run");
+
+            Object result = runMethod.invoke(instance);
+
+            // if nothing is returned from the execution
+            if (result == null) {
+                result = "Nothing";
+            }
+
+            endSendingTime = System.nanoTime();
+            double executionTime = (double) (endSendingTime - startSendingTime) * 1.0e-9;
 
             broadcastLocalResults(result, executionTime);
 
@@ -167,7 +222,7 @@ public class DeploymentController {
 
         ArrayList<NodeOffloadingPercentage> nodeOffPerc = framework.decisionEngine.makeDecision(t, false, 0.5, 0.5);
 
-        if (nodeOffPerc.size() == 1 && nodeOffPerc.get(0).getNode() == framework.getSelfNode()){
+        if (nodeOffPerc.size() == 1 && nodeOffPerc.get(0).getNode() == framework.getSelfNode()) {
             runLocally(t, resource_name, params);
         } else {
             if (nodeOffPerc.get(0).getNode() instanceof MobileNode) {
@@ -194,7 +249,7 @@ public class DeploymentController {
 
     }
 
-    private void runOnEdge(Context context, String resource_name, Object... params){
+    private void runOnEdge(Context context, String resource_name, Object... params) {
 
         Log.d(TAG, "running " + task.getTaskName() + " on edge");
 
@@ -209,7 +264,7 @@ public class DeploymentController {
         }
     }
 
-    private void runOnCloud(Context context, String resource_name, Object... params){
+    private void runOnCloud(Context context, String resource_name, Object... params) {
 
         Log.d(TAG, "running " + task.getTaskName() + " on public cloud");
 
@@ -224,40 +279,41 @@ public class DeploymentController {
 
     /**
      * Execute the task on the Edge node
+     *
      * @param context
-     * @param node Edge node
+     * @param node          Edge node
      * @param resource_name The resource name if any
-     * @param params Other params
+     * @param params        Other params
      */
-    private void executeRemotely(Context context, EdgeNode node, String resource_name, Object[] params){
+    private void executeRemotely(Context context, EdgeNode node, String resource_name, Object[] params) {
 
         if (node.session.isConnected()) {
-            Log.d(TAG, "trying to call " +  task.getTaskName() + " procedure");
+            Log.d(TAG, "trying to call " + task.getTaskName() + " procedure");
 
             mContext = context;
 
             startSendingTime = System.nanoTime();
 
             // subscribe to the result of offloading
-                CompletableFuture<Subscription> subFuture = node.session.subscribe(
-                        OFFLOADING_RESULT_SUB,
-                        this::onOffloadingResult);
+            CompletableFuture<Subscription> subFuture = node.session.subscribe(
+                    OFFLOADING_RESULT_SUB,
+                    this::onOffloadingResult);
 
-                subFuture.whenComplete((subscription, throwable) -> {
-                    if (throwable == null) {
+            subFuture.whenComplete((subscription, throwable) -> {
+                if (throwable == null) {
 
-                        mContext = context;
-                        sub = subscription;
-                        subscribed = true;
-                        // We have successfully subscribed.
-                        Log.d(TAG, "Subscribed to topic " + subscription.topic);
-                    } else {
-                        // Something went bad.
-                        throwable.printStackTrace();
-                        task.setCompleted(false);
-                        addExecutionEntry(task);
-                    }
-                });
+                    mContext = context;
+                    sub = subscription;
+                    subscribed = true;
+                    // We have successfully subscribed.
+                    Log.d(TAG, "Subscribed to topic " + subscription.topic);
+                } else {
+                    // Something went bad.
+                    throwable.printStackTrace();
+                    task.setCompleted(false);
+                    addExecutionEntry(task);
+                }
+            });
 
             // check if procedure is registered
             CompletableFuture<CallResult> registeredFuture = node.session.call(WAMP_LOOKUP, task.getTaskName());
@@ -346,15 +402,16 @@ public class DeploymentController {
 
     /**
      * Runs the task on the Cloud Node
+     *
      * @param context
-     * @param node Cloud node
+     * @param node          Cloud node
      * @param resource_name resource name if any
-     * @param params extra paramaters
+     * @param params        extra paramaters
      */
-    private void executeRemotely(Context context, CloudNode node, String resource_name, Object[] params){
+    private void executeRemotely(Context context, CloudNode node, String resource_name, Object[] params) {
 
         if (node.session.isConnected()) {
-            Log.d(TAG, "trying to call " +  task.getTaskName() + " procedure");
+            Log.d(TAG, "trying to call " + task.getTaskName() + " procedure");
 
             mContext = context;
 
@@ -404,7 +461,7 @@ public class DeploymentController {
                             });
                         }
 
-                        String sourceCode =  framework.fetchSourceCode(task.getTaskName());
+                        String sourceCode = framework.fetchSourceCode(task.getTaskName());
 
                         // publish (offload) the source code
                         CompletableFuture<Publication> pubFuture = node.session.publish(
@@ -435,7 +492,7 @@ public class DeploymentController {
                     if (resource_name != null) {
                         callFuture = node.session.call(
                                 task.getTaskName(), resource_name, params);
-                    } else{
+                    } else {
                         callFuture = node.session.call(
                                 task.getTaskName(), params);
                     }
@@ -458,16 +515,16 @@ public class DeploymentController {
         sub.unsubscribe();
     }
 
-    private void broadcastResults(List<Object> results){
+    private void broadcastResults(List<Object> results) {
         String executionResult = String.valueOf(results.get(0));
         double executionTime = (Double) results.get(1);
 
         Log.d(TAG, "Received result: " + executionResult + " in " + executionTime + " secs");
-        
+
         Log.d(TAG, "start in ns: " + startSendingTime);
         Log.d(TAG, "end in ns: " + endSendingTime);
 
-        double totalTime = (double)(endSendingTime - startSendingTime) * 1.0e-9;
+        double totalTime = (double) (endSendingTime - startSendingTime) * 1.0e-9;
 
         Log.d(TAG, "Total time in s: " + totalTime);
 
@@ -493,11 +550,11 @@ public class DeploymentController {
         addExecutionEntry(task);
     }
 
-    private void addExecutionEntry(Task task){
+    private void addExecutionEntry(Task task) {
         Log.d(TAG, "addExecutionEntry called");
 
         long insertResult = framework.dbAdapter.addTaskExecution(task);
-        if (insertResult != -1){
+        if (insertResult != -1) {
             Log.d(TAG, "inserted " + task.getTaskName());
         } else {
             Log.e(TAG, "failed to insert " + task.getTaskName());
@@ -513,7 +570,7 @@ public class DeploymentController {
         }
     }
 
-    private void broadcastLocalResults(Object result, double duration){
+    private void broadcastLocalResults(Object result, double duration) {
 
         Log.d(TAG, "Broadcasting local result");
         Intent intent = new Intent(OFFLOADING_RESULT_SUB);
@@ -526,32 +583,32 @@ public class DeploymentController {
 
 
     // https://stackoverflow.com/a/18136892/1478212
-    private static <C> Constructor<C> getAppropriateConstructor(Class<C> c, Object[] initArgs){
-        if(initArgs == null)
+    private static <C> Constructor<C> getAppropriateConstructor(Class<C> c, Object[] initArgs) {
+        if (initArgs == null)
             initArgs = new Object[0];
-        for(Constructor con : c.getDeclaredConstructors()){
+        for (Constructor con : c.getDeclaredConstructors()) {
             Class[] types = con.getParameterTypes();
-            if(types.length!=initArgs.length)
+            if (types.length != initArgs.length)
                 continue;
             boolean match = true;
-            for(int i = 0; i < types.length; i++){
+            for (int i = 0; i < types.length; i++) {
                 Class need = types[i], got = initArgs[i].getClass();
-                if(!need.isAssignableFrom(got)){
-                    if(need.isPrimitive()){
+                if (!need.isAssignableFrom(got)) {
+                    if (need.isPrimitive()) {
                         match = (int.class.equals(need) && Integer.class.equals(got))
                                 || (long.class.equals(need) && Long.class.equals(got))
                                 || (char.class.equals(need) && Character.class.equals(got))
                                 || (short.class.equals(need) && Short.class.equals(got))
                                 || (boolean.class.equals(need) && Boolean.class.equals(got))
                                 || (byte.class.equals(need) && Byte.class.equals(got));
-                    }else{
+                    } else {
                         match = false;
                     }
                 }
-                if(!match)
+                if (!match)
                     break;
             }
-            if(match)
+            if (match)
                 return con;
         }
         throw new IllegalArgumentException("Cannot find an appropriate constructor for class " + c + " and arguments " + Arrays.toString(initArgs));
@@ -582,11 +639,11 @@ public class DeploymentController {
         return sb.toString();
     }
 
-    private File getOutputDir(Context context){
+    private File getOutputDir(Context context) {
 
         String ExternalStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath();
 
-        String folder_main ="mamoc";
+        String folder_main = "mamoc";
 
         File f = new File(Environment.getExternalStorageDirectory(), folder_main);
         if (!f.exists()) {
@@ -595,8 +652,8 @@ public class DeploymentController {
 
         Log.d("externalstorage", ExternalStoragePath);
 
-        try{
-            return new File(ExternalStoragePath  + "/" + folder_main);
+        try {
+            return new File(ExternalStoragePath + "/" + folder_main);
         } catch (Throwable x) {
             Log.e(TAG, "could not create an output directory");
         }

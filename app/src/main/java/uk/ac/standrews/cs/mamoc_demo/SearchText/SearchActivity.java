@@ -45,9 +45,9 @@ public class SearchActivity extends DemoBaseActivity {
 
         radioGroup = findViewById(R.id.fileSizeRadioGroup);
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            if(checkedId == R.id.smallFileRadioButton) {
+            if (checkedId == R.id.smallFileRadioButton) {
                 fileSize = "small.txt";
-            } else if(checkedId == R.id.mediumFileRadioButton) {
+            } else if (checkedId == R.id.mediumFileRadioButton) {
                 fileSize = "medium.txt";
             } else {
                 fileSize = "large.txt";
@@ -72,26 +72,27 @@ public class SearchActivity extends DemoBaseActivity {
 
     /**
      * * This method is called when
-     *  * <p>
-     *  *
-     *  *
+     * * <p>
+     * *
+     * *
+     *
      * @param location The location of execution of the method @ExecutionLocation
      */
-    private void searchText(ExecutionLocation location){
+    private void searchText(ExecutionLocation location) {
 
-        if (fileSize == null){
-            Toast.makeText(this, "Please select a file size", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if (fileSize == null){
+//            Toast.makeText(this, "Please select a file size", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         keyword = keywordTextView.getText().toString();
 
-        if (keyword.isEmpty()){
+        if (keyword.isEmpty()) {
             Toast.makeText(this, "Please enter a keyword", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        switch (location){
+        switch (location) {
             case LOCAL:
                 runLocal(keyword);
                 break;
@@ -104,10 +105,10 @@ public class SearchActivity extends DemoBaseActivity {
             case DYNAMIC:
                 if (runOnce) {
                     runDynamically(keyword);
-                } else{ // for running it 10 times and averaging the results
-                    for (int i=0;i<10;i++){
+                } else { // for running it 10 times and averaging the results
+                    for (int i = 0; i < 10; i++) {
                         runDynamically(keyword);
-                        Log.d(task_name, "Running " + i+1 + "th time: ");
+                        Log.d(task_name, "Running " + i + 1 + "th time: ");
                     }
                 }
                 break;
@@ -115,14 +116,23 @@ public class SearchActivity extends DemoBaseActivity {
     }
 
     private void runLocal(String keyword) {
-        mamocFramework.execute(ExecutionLocation.LOCAL, task_name, fileSize, keyword);
+
+        final int[] searchSize = new int[]{100, 500, 1000, 5000, 10_000, 25_000, 50_000, 100_000, 250_000, 500_000};
+
+//        final int[] fibNumbers = new int[]{10, 12, 15, 18, 20, 22, 25, 28, 30, 32};
+//        final int[] nQueensNums = new int[]{8, 9, 10, 11, 12, 13, 14};
+//        final int[] sortSize = new int[]{100, 500, 1000, 5000, 10_000, 25_000, 50_000, 100_000};
+
+        for (int fileSize : searchSize) {
+            mamocFramework.execute(ExecutionLocation.LOCAL, task_name, fileSize, keyword);
+        }
     }
 
     private void runEdge(String keyword) {
 
-        try{
+        try {
             mamocFramework.execute(ExecutionLocation.EDGE, task_name, fileSize, keyword);
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e("runEdge", e.getLocalizedMessage());
             Toast.makeText(this, "Could not execute on Edge", Toast.LENGTH_SHORT).show();
         }
@@ -130,18 +140,18 @@ public class SearchActivity extends DemoBaseActivity {
 
     private void runCloud(String keyword) {
 
-        try{
+        try {
             mamocFramework.execute(ExecutionLocation.PUBLIC_CLOUD, task_name, fileSize, keyword);
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e("runCloud", e.getLocalizedMessage());
             Toast.makeText(this, "Could not execute on Cloud", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void runDynamically(String keyword) {
-        try{
-            mamocFramework.execute(ExecutionLocation.DYNAMIC, task_name,  fileSize, keyword);
-        } catch (Exception e){
+        try {
+            mamocFramework.execute(ExecutionLocation.DYNAMIC, task_name, fileSize, keyword);
+        } catch (Exception e) {
             Log.e("Mamoc", e.getLocalizedMessage());
         }
     }
