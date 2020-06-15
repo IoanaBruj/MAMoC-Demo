@@ -60,6 +60,11 @@
             android:label="NQueens Demo"
             android:theme="@style/AppTheme.Base" />
 
+        <activity
+            android:name=".Fibonacci.FibonacciActivity"
+            android:label="Fibonacci Demo"
+            android:theme="@style/AppTheme.Base" />
+
         <!--<uses-library-->
             <!--android:name="com.google.android.wearable"-->
             <!--android:required="true" />-->

@@ -42,8 +42,8 @@ public abstract class DemoBaseActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
 
             String result = intent.getStringExtra("result");
-            Double duration = intent.getDoubleExtra("duration", 0.0);
-            Double overhead = intent.getDoubleExtra("overhead", 0.0);
+            double duration = intent.getDoubleExtra("duration", 0.0);
+            double overhead = intent.getDoubleExtra("overhead", 0.0);
 
             addLog(result, duration, overhead);
         }
@@ -100,11 +100,7 @@ public abstract class DemoBaseActivity extends AppCompatActivity {
         dialogBuilder.setTitle(null);
         dialogBuilder.setIcon(R.mipmap.ic_launcher);
         dialogBuilder.setMessage(msg);
-        dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        dialogBuilder.setPositiveButton("OK", (dialog, which) -> dialog.cancel());
 
         dialogBuilder.setCancelable(false);
         dialogBuilder.show();

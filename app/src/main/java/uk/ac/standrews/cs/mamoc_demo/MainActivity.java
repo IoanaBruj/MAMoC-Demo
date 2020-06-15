@@ -9,6 +9,7 @@ import android.widget.Button;
 import uk.ac.standrews.cs.mamoc_client.MamocFramework;
 import uk.ac.standrews.cs.mamoc_client.ServiceDiscovery.DiscoveryActivity;
 import uk.ac.standrews.cs.mamoc_demo.Benchmark.BenchmarkActivity;
+import uk.ac.standrews.cs.mamoc_demo.Fibonacci.FibonacciActivity;
 import uk.ac.standrews.cs.mamoc_demo.NQueens.NQueensActivity;
 import uk.ac.standrews.cs.mamoc_demo.SearchText.SearchActivity;
 import uk.ac.standrews.cs.mamoc_demo.Sorting.SortingActivity;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         nqueensDemo.setOnClickListener(view -> openNQueensDemo());
 
         mandelbrotDemo = findViewById(R.id.mandelbrotButton);
-        mandelbrotDemo.setOnClickListener(view -> openLinpackDemo());
+        mandelbrotDemo.setOnClickListener(view -> openFibDemo());
     }
 
     private void openDiscoveryActivity() {
@@ -59,9 +60,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(nqueensIntent);
     }
 
-    private void openLinpackDemo(){
-        Intent mandelbrotIntent = new Intent(this, BenchmarkActivity.class);
-        startActivity(mandelbrotIntent);
+    private void openFibDemo(){
+        Intent FibIntent = new Intent(this, FibonacciActivity.class);
+        startActivity(FibIntent);
     }
 
 }
