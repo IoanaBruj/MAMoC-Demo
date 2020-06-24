@@ -43,7 +43,7 @@ public class EdgeNode extends MamocNode implements WebSocket, Comparable<MamocNo
     public void send(String text) {
         if (edgeConnection.isConnected()) {
             edgeConnection.sendMessage(text);
-        } else{
+        } else {
             Log.e("edgeConnection", String.valueOf(edgeConnection.isConnected()));
         }
     }

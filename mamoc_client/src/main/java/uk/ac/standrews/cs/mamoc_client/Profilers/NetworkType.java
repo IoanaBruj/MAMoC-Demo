@@ -7,7 +7,7 @@ public enum NetworkType {
     CELLULAR_3G("CELLULAR_3G"),
     CELLULAR_4G("CELLULAR_4G"),
     CELLULAR_UNKNOWN("CELLULAR_UNKNOWN");
-    
+
     private String value;
 
     public String getValue() {

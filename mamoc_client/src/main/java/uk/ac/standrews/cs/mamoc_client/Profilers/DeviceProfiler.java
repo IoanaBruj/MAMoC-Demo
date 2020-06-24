@@ -93,9 +93,9 @@ public class DeviceProfiler {
     public BatteryState isDeviceCharging() {
         Intent batteryStatus = getBatteryStatusIntent();
         int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-        if (status == BatteryManager.BATTERY_STATUS_CHARGING  || status == BatteryManager.BATTERY_STATUS_FULL){
+        if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL) {
             return BatteryState.CHARGING;
-        } else{
+        } else {
             return BatteryState.NOT_CHARGING;
         }
     }

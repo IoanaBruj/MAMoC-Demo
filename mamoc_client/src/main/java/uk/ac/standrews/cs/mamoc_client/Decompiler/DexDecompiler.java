@@ -37,7 +37,7 @@ public class DexDecompiler {
         this.classNames = classNames;
     }
 
-    public void start(){
+    public void start() {
         File sourceDir = getAPKSourceDir(context);
         File outputDir = getOutputDir(context);
 
@@ -50,7 +50,7 @@ public class DexDecompiler {
         assert outputDir != null;
         if (outputDir.exists()) {
             apkFiles = outputDir.listFiles();
-        } else{
+        } else {
             LOG.error("No outputDir found");
         }
 
@@ -89,7 +89,7 @@ public class DexDecompiler {
                 boolean dexDeleted = dexInputFile.delete();
                 if (dexDeleted) {
                     LOG.info(dexInputFile.getName() + " successfully deleted");
-                } else{
+                } else {
                     LOG.info("could not delete: " + dexInputFile.getName());
                 }
             }
@@ -119,11 +119,11 @@ public class DexDecompiler {
         return null;
     }
 
-    private File getOutputDir(Context context){
+    private File getOutputDir(Context context) {
 
         String ExternalStoragePath = Environment.getExternalStorageDirectory().getAbsolutePath();
 
-        String folder_main ="mamoc";
+        String folder_main = "mamoc";
 
         File f = new File(Environment.getExternalStorageDirectory(), folder_main);
         if (!f.exists()) {
@@ -132,8 +132,8 @@ public class DexDecompiler {
 
         Log.d("externalstorage", ExternalStoragePath);
 
-        try{
-            return new File(ExternalStoragePath  + "/" + folder_main);
+        try {
+            return new File(ExternalStoragePath + "/" + folder_main);
         } catch (Throwable x) {
             LOG.error("could not create an output directory");
         }

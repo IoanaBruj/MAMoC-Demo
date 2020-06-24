@@ -23,8 +23,8 @@ public class DecisionEngine {
     private static DecisionEngine instance;
 
     // TODO: set these values dynamically based on past offloading data and number of checks performed
-    private final int MAX_REMOTE_EXECUTIONS = 5;
-    private final int MAX_LOCAL_EXECUTIONS = 5;
+    private int MAX_REMOTE_EXECUTIONS = 5;
+    private int MAX_LOCAL_EXECUTIONS = 5;
 
     private Context mContext;
     private MamocFramework framework;
@@ -53,10 +53,11 @@ public class DecisionEngine {
      * This is the core method of offload decision making. It fetches a list of past task executions from
      * the DBAdapter and decides to execute the task locally or remotely according to the task offlad decision
      * making algorithm
-     * @param task the received offloadable task
-     * @param isParallel whether the task can be parallalized
+     *
+     * @param task            the received offloadable task
+     * @param isParallel      whether the task can be parallalized
      * @param executionWeight the weight given to execution (0-1)
-     * @param energyWeight the weight given to energy (0-1)
+     * @param energyWeight    the weight given to energy (0-1)
      * @return List of [Node:OffloadingPercentage] to be used by the Deployment Controller
      */
     public ArrayList<NodeOffloadingPercentage> makeDecision(Task task, Boolean isParallel, double executionWeight, double energyWeight) {
@@ -82,26 +83,28 @@ public class DecisionEngine {
 
         // more than 5 local executions of the task - let's check if local is still better
         // OR check if the task has previously been offloaded, if not, let's do some remote offloading to record their execution times
-        if (localExecs % MAX_LOCAL_EXECUTIONS == 0 || remoteExecs == 0){
+        if (localExecs % MAX_LOCAL_EXECUTIONS == 0 || remoteExecs == 0) {
             Log.d(TAG, "MAX LOCAL EXECUTIONS REACHED");
+            MAX_LOCAL_EXECUTIONS -= 1;
             return decideOffloading(sites, executionWeight, energyWeight);
         }
 
         // more than 5 remote executions of the task - let's recalculate offloading scores and double check if it is still worth offloading
-        if (remoteExecs % MAX_REMOTE_EXECUTIONS == 0 || localExecs == 0){
+        if (remoteExecs % MAX_REMOTE_EXECUTIONS == 0 || localExecs == 0) {
             Log.d(TAG, "MAX REMOTE EXECUTIONS REACHED");
+            MAX_REMOTE_EXECUTIONS -= 1;
 
             double localExecTime = 0;
             double remoteExecTime = 0;
 
-            localExecTime = localTaskExecutions.get(localExecs-1).getExecutionTime();
+            localExecTime = localTaskExecutions.get(localExecs - 1).getExecutionTime();
             Log.d(TAG, "The last executed local execution time: " + localExecTime);
 
             remoteExecTime = remoteTaskExecutions.get(remoteExecs - 1).getExecutionTime();
             Log.d(TAG, "The last executed remote execution time: " + remoteExecTime);
 
             // Compare the last local execution with the last remote execution
-            if (localExecTime < remoteExecTime){
+            if (localExecTime < remoteExecTime) {
                 framework.lastExecution = "Local";
                 nodeOffPerc.add(new NodeOffloadingPercentage(framework.getSelfNode(), 100.0));
                 return nodeOffPerc;
@@ -118,25 +121,27 @@ public class DecisionEngine {
 
     /**
      * This method is called when it is decided to offload the task for remote execution
-     * @param sites the list of available sites
+     *
+     * @param sites           the list of available sites
      * @param executionWeight the weight given to execution (0-1)
-     * @param energyWeight the weight given to energy (0-1)
+     * @param energyWeight    the weight given to energy (0-1)
      * @return A list of [Node:OffloadingPercentage] from @scorePartitioner or @multicriteriaSolver
      */
     private ArrayList<NodeOffloadingPercentage> decideOffloading(ArrayList<MamocNode> sites, double executionWeight, double energyWeight) {
 
         // Only execution speed matters, use offloading scores
-        if (executionWeight == 1){
+        if (executionWeight == 1) {
             return scorePartitioner(sites);
         }
         // execution and energy, use MCDM
-        else{
+        else {
             return multicriteriaSolver(sites);
         }
     }
 
     /**
      * Communicates with the service discovery component to give a list of discovered and connected nodes
+     *
      * @return List of nodes
      */
     private ArrayList<MamocNode> getAvailableSites() {
@@ -156,6 +161,7 @@ public class DecisionEngine {
 
     /**
      * Uses the offloading score to generate the [Node:OffloadingPercentage]
+     *
      * @param sites list of nodes
      * @return [Node:OffloadingPercentage]
      */
@@ -176,7 +182,8 @@ public class DecisionEngine {
     }
 
     /**
-     *  Uses MCDM to evaluate different criteria and rank the available nodes
+     * Uses MCDM to evaluate different criteria and rank the available nodes
+     *
      * @param sites list of nodes
      * @return [Node:OffloadingPercentage]
      */
@@ -200,6 +207,7 @@ public class DecisionEngine {
 
     /**
      * Perform profiling the available nodes
+     *
      * @param nodes list of nodes
      * @return A map of the nodes with their respective fuzzy values generated from @profileNode
      */
@@ -220,6 +228,7 @@ public class DecisionEngine {
 
     /**
      * Generates a list of fuzzy values for each nodes based on the profiling information
+     *
      * @param node A MAMoC node to be profiled
      * @return Fuzzy values list for the node
      */
@@ -243,7 +252,7 @@ public class DecisionEngine {
                 siteCriteria.add(Fuzzy.HIGH);
             } else if (rtt < 200) {
                 siteCriteria.add(Fuzzy.GOOD);
-            } else if (rtt < 300){
+            } else if (rtt < 300) {
                 siteCriteria.add(Fuzzy.LOW);
             } else {
                 siteCriteria.add(Fuzzy.VERY_LOW);
@@ -254,7 +263,7 @@ public class DecisionEngine {
             mem = framework.deviceProfiler.fetchAvailableMemory();
 
             // Three fold speedup
-            if (cpu > (selfNode.getCpuFreq() * 3)  && mem > selfNode.getMemoryMB()) {
+            if (cpu > (selfNode.getCpuFreq() * 3) && mem > selfNode.getMemoryMB()) {
                 siteCriteria.add(Fuzzy.VERY_HIGH);
             }
             // Two fold speedup
@@ -262,11 +271,11 @@ public class DecisionEngine {
                 siteCriteria.add(Fuzzy.HIGH);
             }
             // Slightly better
-            else if (cpu > selfNode.getCpuFreq() && mem > selfNode.getMemoryMB()){
+            else if (cpu > selfNode.getCpuFreq() && mem > selfNode.getMemoryMB()) {
                 siteCriteria.add(Fuzzy.GOOD);
             }
             // Worse
-            else if (cpu < selfNode.getCpuFreq() && mem < selfNode.getMemoryMB()){
+            else if (cpu < selfNode.getCpuFreq() && mem < selfNode.getMemoryMB()) {
                 siteCriteria.add(Fuzzy.VERY_LOW);
             } else {
                 siteCriteria.add(Fuzzy.LOW);
@@ -320,10 +329,11 @@ public class DecisionEngine {
 
     /**
      * The AHP and TOPSIS methods to evaluate the criteria and generate the ranking of the nodes
+     *
      * @param availableSites list of nodes
      * @return A map of the weighted decision matrix for each node
      */
-    private TreeMap<MamocNode, Double> performMCDMEvaluation(HashMap<MamocNode, ArrayList<Fuzzy>> availableSites){
+    private TreeMap<MamocNode, Double> performMCDMEvaluation(HashMap<MamocNode, ArrayList<Fuzzy>> availableSites) {
 
         Log.d(TAG, "************** MCDM AHP ******************");
         Log.d(TAG, "Calculating AHP Criteria weighting: ");

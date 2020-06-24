@@ -14,7 +14,7 @@ import uk.ac.standrews.cs.mamoc_client.Utils.Utils;
 import uk.ac.standrews.cs.mamoc_client.Profilers.BatteryState;
 import uk.ac.standrews.cs.mamoc_client.Profilers.DeviceProfiler;
 
-public class MobileNode extends MamocNode implements Comparable<MamocNode>{
+public class MobileNode extends MamocNode implements Comparable<MamocNode> {
 
     private String deviceID;
     private String osVersion;

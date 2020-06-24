@@ -44,7 +44,7 @@ public class CloudNode extends MamocNode implements WebSocket, Comparable<MamocN
     public void send(String text) {
         if (cloudConnection.isConnected()) {
             cloudConnection.sendMessage(text);
-        } else{
+        } else {
             Log.e("cloudConnection", String.valueOf(cloudConnection.isConnected()));
         }
     }

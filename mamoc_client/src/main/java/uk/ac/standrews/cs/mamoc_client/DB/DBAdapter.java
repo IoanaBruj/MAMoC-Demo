@@ -44,7 +44,7 @@ public class DBAdapter {
         return instance;
     }
 
-    public long addTaskExecution(Task task){
+    public long addTaskExecution(Task task) {
 
         Log.d(TAG, "inserting task to db: " + task.getTaskName());
 
@@ -61,13 +61,13 @@ public class DBAdapter {
         return db.insert(TABLE_OFFLOAD, null, values);
     }
 
-    public ArrayList<Task> getExecutions(Task task, boolean Remote){
+    public ArrayList<Task> getExecutions(Task task, boolean Remote) {
 
-        Log.d(TAG, "Fetching " + (Remote?"remote":"local") + " executions: " + task.getTaskName());
+        Log.d(TAG, "Fetching " + (Remote ? "remote" : "local") + " executions: " + task.getTaskName());
 
-        ArrayList<Task> taskExecutions =  new ArrayList<>();
+        ArrayList<Task> taskExecutions = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery("select * from " + TABLE_OFFLOAD,null);
+        Cursor cursor = db.rawQuery("select * from " + TABLE_OFFLOAD, null);
 
         int nameIndex = cursor.getColumnIndex(DBHelper.COL_TASK_NAME);
         int locationIndex = cursor.getColumnIndex(DBHelper.COL_EXEC_LOCATION);
@@ -192,7 +192,7 @@ public class DBAdapter {
     }
 
     public ArrayList<MobileNode> getMobileDevicesList() {
-        ArrayList<MobileNode> devices =  new ArrayList<>();
+        ArrayList<MobileNode> devices = new ArrayList<>();
 
         Cursor cursor = db.query(TABLE_MOBILE_DEVICES, null, null, null,
                 null, null, DBHelper.COL_DEV_ID);
