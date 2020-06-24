@@ -118,7 +118,7 @@ public class Topsis {
     private HashMap<MamocNode, Double> calculateDistance(HashMap<MamocNode, ArrayList<Double>> sitesMatrix, boolean ideal) {
         EuclideanDistance distance = new EuclideanDistance();
         // The normalized values for the ideal solution and negative ideal solution on criteria are always (1,1,1) and (0,0,0) respectively
-        Double dValue = 0.0;
+        double dValue = 0.0;
         HashMap<MamocNode, Double> results = new HashMap<>();
 
         for (Map.Entry<MamocNode,ArrayList<Double>> entry: sitesMatrix.entrySet()) {
