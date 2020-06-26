@@ -192,6 +192,8 @@ public class MamocFramework {
         selfNode.setDeviceID(deviceID);
         selfNode.setIp(Utils.getIPAddress(true));
 
+        Log.e(TAG, "I am: " + selfNode.toString());
+
         return selfNode;
     }
 
@@ -199,6 +201,7 @@ public class MamocFramework {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         for (StackTraceElement element : stackTrace)
             if (element.getClassName().startsWith("org.junit.")) {
+//                Log.d(TAG, "Testing mode");
                 return true;
             }
         return false;
