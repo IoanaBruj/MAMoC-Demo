@@ -140,9 +140,9 @@ public class ServiceDiscovery {
     }
 
     void connectEdge(String wsUri){
-        edge = new EdgeNode(EDGE_IP, 8080);
 
         EDGE_IP = wsUri;
+        edge = new EdgeNode(EDGE_IP, 8080);
 
         if (!wsUri.startsWith("ws://") && !wsUri.startsWith("wss://")) {
 //            wsUri = "ws://" + wsUri + ":8080/ws";

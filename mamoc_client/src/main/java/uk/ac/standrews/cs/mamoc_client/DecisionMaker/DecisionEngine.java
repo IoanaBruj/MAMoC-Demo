@@ -23,8 +23,8 @@ public class DecisionEngine {
     private static DecisionEngine instance;
 
     // TODO: set these values dynamically based on past offloading data and number of checks performed
-    private int MAX_REMOTE_EXECUTIONS = 5;
-    private int MAX_LOCAL_EXECUTIONS = 5;
+    private int MAX_REMOTE_EXECUTIONS;
+    private int MAX_LOCAL_EXECUTIONS;
 
     private Context mContext;
     private MamocFramework framework;
@@ -36,6 +36,8 @@ public class DecisionEngine {
     private DecisionEngine(Context context) {
         this.mContext = context;
         framework = MamocFramework.getInstance(context);
+        MAX_LOCAL_EXECUTIONS = 5;
+        MAX_REMOTE_EXECUTIONS = 5;
     }
 
     public static DecisionEngine getInstance(Context context) {
@@ -83,16 +85,12 @@ public class DecisionEngine {
 
         // more than 5 local executions of the task - let's check if local is still better
         // OR check if the task has previously been offloaded, if not, let's do some remote offloading to record their execution times
-        if (localExecs % MAX_LOCAL_EXECUTIONS == 0 || remoteExecs == 0) {
-            Log.d(TAG, "MAX LOCAL EXECUTIONS REACHED");
-            MAX_LOCAL_EXECUTIONS -= 1;
-            return decideOffloading(sites, executionWeight, energyWeight);
-        }
+
 
         // more than 5 remote executions of the task - let's recalculate offloading scores and double check if it is still worth offloading
-        if (remoteExecs % MAX_REMOTE_EXECUTIONS == 0 || localExecs == 0) {
+        if (remoteExecs == MAX_REMOTE_EXECUTIONS || localExecs == 0) {
             Log.d(TAG, "MAX REMOTE EXECUTIONS REACHED");
-            MAX_REMOTE_EXECUTIONS -= 1;
+//            MAX_REMOTE_EXECUTIONS -= 1;
 
             double localExecTime = 0;
             double remoteExecTime = 0;
@@ -111,6 +109,11 @@ public class DecisionEngine {
             } else {
                 return decideOffloading(sites, executionWeight, energyWeight);
             }
+        }
+        if (localExecs == MAX_LOCAL_EXECUTIONS || remoteExecs == 0) {
+            Log.d(TAG, "MAX LOCAL EXECUTIONS REACHED");
+//            MAX_LOCAL_EXECUTIONS -= 1;
+            return decideOffloading(sites, executionWeight, energyWeight);
         }
 
         // For all other normal local executions

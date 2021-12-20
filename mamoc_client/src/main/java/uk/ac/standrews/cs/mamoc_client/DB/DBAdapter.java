@@ -81,7 +81,7 @@ public class DBAdapter {
         while (cursor.moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndex(DBHelper.COL_TASK_NAME));
             if (Remote) {
-                if (name.equalsIgnoreCase(task.getTaskName()) && !cursor.getString(locationIndex).equals("LOCAL")) {
+                if (name.equalsIgnoreCase(task.getTaskName())) {
                     Task remote = new Task();
                     remote.setTaskName(cursor.getString(nameIndex));
                     remote.setExecLocation(ExecutionLocation.valueOf(cursor.getString(locationIndex)));
@@ -95,7 +95,7 @@ public class DBAdapter {
                     taskExecutions.add(remote);
                 }
             } else {
-                if (name.equalsIgnoreCase(task.getTaskName()) && cursor.getString(locationIndex).equals("LOCAL")) {
+                if (name.equalsIgnoreCase(task.getTaskName())) {
                     Task remote = new Task();
                     remote.setTaskName(cursor.getString(nameIndex));
                     remote.setExecLocation(ExecutionLocation.valueOf(cursor.getString(locationIndex)));

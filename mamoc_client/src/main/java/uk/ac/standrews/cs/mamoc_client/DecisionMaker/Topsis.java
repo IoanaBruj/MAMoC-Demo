@@ -1,5 +1,6 @@
 package uk.ac.standrews.cs.mamoc_client.DecisionMaker;
 
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import org.apache.commons.math3.ml.distance.EuclideanDistance;
@@ -7,6 +8,7 @@ import org.apache.commons.math3.ml.distance.EuclideanDistance;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import uk.ac.standrews.cs.mamoc_client.Model.MamocNode;
@@ -25,8 +27,8 @@ public class Topsis {
 
     public TreeMap<MamocNode, Double> calculateTopsis(HashMap<MamocNode, ArrayList<Fuzzy>> sites) {
 
-        availableSites = sites;
 
+        availableSites = sites;
         sitesMatrix = calculateFuzzyTopsis(availableSites);
 
         HashMap<MamocNode, Double> idealDistances = calculateDistance(sitesMatrix, true);
@@ -46,8 +48,8 @@ public class Topsis {
 
     private HashMap<MamocNode, ArrayList<Double>> calculateFuzzyTopsis(HashMap<MamocNode, ArrayList<Fuzzy>> availableSites) {
 
-//        Log.d(TAG, availableSites.keySet());
-//        Log.d(TAG, availableSites.values());
+        Log.d(TAG, String.valueOf(availableSites.keySet()));
+        Log.d(TAG, String.valueOf(availableSites.values()));
 
         for (Map.Entry<MamocNode, ArrayList<Fuzzy>> entry : availableSites.entrySet()) {
 
@@ -85,35 +87,35 @@ public class Topsis {
         return sitesMatrix;
     }
 
-//    private ArrayList<Fuzzy> profileNode(String node){
-//        ArrayList<Fuzzy> siteCriteria = new ArrayList<>();
-//
-//        // Mobile node
-//        if (node.equalsIgnoreCase(Config.alternatives[0])){
-//            siteCriteria.add(Config.MOBILE_BANDWIDTH);
-//            siteCriteria.add(Config.MOBILE_SPEED);
-//            siteCriteria.add(Config.MOBILE_AVAILABILITY);
-//            siteCriteria.add(Config.MOBILE_SECURITY);
-//            siteCriteria.add(Config.MOBILE_PRICE);
-//        }
-//        else if (node.equalsIgnoreCase(Config.alternatives[1])) { // Edge
-//            siteCriteria.add(Config.EDGE_BANDWIDTH);
-//            siteCriteria.add(Config.EDGE_SPEED);
-//            siteCriteria.add(Config.EDGE_AVAILABILITY);
-//            siteCriteria.add(Config.EDGE_SECURITY);
-//            siteCriteria.add(Config.EDGE_PRICE);
-//        }
-//        // Public cloud instance
-//        else {
-//            siteCriteria.add(Config.PUBLIC_BANDWIDTH);
-//            siteCriteria.add(Config.PUBLIC_SPEED);
-//            siteCriteria.add(Config.PUBLIC_AVAILABILITY);
-//            siteCriteria.add(Config.PUBLIC_SECURITY);
-//            siteCriteria.add(Config.PUBLIC_PRICE);
-//        }
-//
-//        return siteCriteria;
-//    }
+    private ArrayList<Fuzzy> profileNode(String node){
+        ArrayList<Fuzzy> siteCriteria = new ArrayList<>();
+
+        // Mobile node
+        if (node.equalsIgnoreCase(Config.alternatives[0])){
+            siteCriteria.add(Config.MOBILE_BANDWIDTH);
+            siteCriteria.add(Config.MOBILE_SPEED);
+            siteCriteria.add(Config.MOBILE_AVAILABILITY);
+            siteCriteria.add(Config.MOBILE_SECURITY);
+            siteCriteria.add(Config.MOBILE_PRICE);
+        }
+        else if (node.equalsIgnoreCase(Config.alternatives[1])) { // Edge
+            siteCriteria.add(Config.EDGE_BANDWIDTH);
+            siteCriteria.add(Config.EDGE_SPEED);
+            siteCriteria.add(Config.EDGE_AVAILABILITY);
+            siteCriteria.add(Config.EDGE_SECURITY);
+            siteCriteria.add(Config.EDGE_PRICE);
+        }
+        // Public cloud instance
+        else {
+            siteCriteria.add(Config.PUBLIC_BANDWIDTH);
+            siteCriteria.add(Config.PUBLIC_SPEED);
+            siteCriteria.add(Config.PUBLIC_AVAILABILITY);
+            siteCriteria.add(Config.PUBLIC_SECURITY);
+            siteCriteria.add(Config.PUBLIC_PRICE);
+        }
+
+        return siteCriteria;
+    }
 
     private HashMap<MamocNode, Double> calculateDistance(HashMap<MamocNode, ArrayList<Double>> sitesMatrix, boolean ideal) {
         EuclideanDistance distance = new EuclideanDistance();

@@ -15,6 +15,7 @@ import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
@@ -116,6 +117,7 @@ public class WiFiP2PSDActivity extends AppCompatActivity implements PeerListFrag
         return super.onOptionsItemSelected(item);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void advertiseService(View view) {
         startRegistrationAndDiscovery(Utils.getPort(this));
 
@@ -129,6 +131,7 @@ public class WiFiP2PSDActivity extends AppCompatActivity implements PeerListFrag
     /**
      * Registers a local service and then initiates a service discovery
      */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void startRegistrationAndDiscovery(int port) {
 
         wifiP2pManager.clearLocalServices(wifip2pChannel, new WifiP2pManager.ActionListener() {
@@ -153,6 +156,7 @@ public class WiFiP2PSDActivity extends AppCompatActivity implements PeerListFrag
                                                 wifiP2pManager.discoverServices(wifip2pChannel, new WifiP2pManager.ActionListener() {
                                                     @Override
                                                     public void onSuccess() {
+
                                                         // this is my recursive discovery approach
 //                                                        handler.postDelayed(discoveryRunnable, AppConfig.DNS_SD_SERVICE_DISCOVERABLE_DURATION_S * 1000);
                                                     }

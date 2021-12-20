@@ -14,7 +14,7 @@ public class Constants {
 
     public static final String EDGE_REALM_NAME = "mamoc_realm";
 
-    public static String CLOUD_IP = "18.130.29.6";
+    public static String CLOUD_IP = "3.95.231.95";
     public static final String CLOUD_REALM_NAME = "mamoc_realm";
 
     public static final String WAMP_LOOKUP = "wamp.registration.match";

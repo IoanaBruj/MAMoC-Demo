@@ -3,6 +3,7 @@ package uk.ac.standrews.cs.mamoc_client;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import org.atteo.classindex.ClassIndex;
@@ -155,6 +156,7 @@ public class MamocFramework {
             Log.d("SourceFile", sourceFile.getAbsolutePath());
             return Utils.readFile(mContext, sourceFile.getAbsolutePath());
 
+
         } catch (Throwable x) {
             Log.e("error", "could not fetch the output directory");
         }
@@ -172,6 +174,7 @@ public class MamocFramework {
             deploymentController.runLocally(task, resource_name, params);
         } else {
             deploymentController.executeRemotely(mContext, location, task, resource_name, params);
+
         }
     }
 
@@ -179,8 +182,10 @@ public class MamocFramework {
         Task task = new Task();
         task.setTaskName(task_name);
 
-        deploymentController.runLocally(task, number, params);
-    }
+
+            deploymentController.runLocally(task, number, params);
+
+        }
 
     public MobileNode getSelfNode(){
         selfNode = new MobileNode(mContext);

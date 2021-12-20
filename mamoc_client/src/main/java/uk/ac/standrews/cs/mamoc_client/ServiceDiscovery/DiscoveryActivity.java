@@ -1,12 +1,17 @@
 package uk.ac.standrews.cs.mamoc_client.ServiceDiscovery;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,7 +46,9 @@ public class DiscoveryActivity extends AppCompatActivity {
     private Button discoverButton, edgeBtn, cloudBtn;
 
     private TextView listeningPort, edgeTextView, cloudTextView;
-
+    private final IntentFilter intentFilter = new IntentFilter();
+    WifiP2pManager.Channel channel;
+    WifiP2pManager manager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +56,8 @@ public class DiscoveryActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbarDiscovery);
         setSupportActionBar(toolbar);
+
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(serviceDiscoveryReceiver,
                 new IntentFilter(SERVICE_DISCOVERY_BROADCASTER));
@@ -80,6 +89,8 @@ public class DiscoveryActivity extends AppCompatActivity {
         checkWritePermissions();
         logInterfaces();
         loadPrefs();
+        manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        channel = manager.initialize(this, getMainLooper(), null);
     }
 
     private void loadPrefs() {
@@ -150,7 +161,7 @@ public class DiscoveryActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @SuppressLint("StringFormatMatches")
+    @SuppressLint({"StringFormatMatches", "SetTextI18n"})
     @Override
     protected void onResume() {
         super.onResume();
@@ -177,6 +188,21 @@ public class DiscoveryActivity extends AppCompatActivity {
         if (!isGranted) {
             Utils.requestPermission(Constants.WRITE_PERMISSION, Constants
                     .WRITE_PERM_REQ_CODE, this);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) ||
+                    (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS) != PackageManager.PERMISSION_GRANTED) ||
+                    (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+            }
+        } else {
+            if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            }
         }
     }
 
