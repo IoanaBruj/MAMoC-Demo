@@ -1,6 +1,6 @@
 package uk.ac.standrews.cs.mamoc_client.DecisionMaker;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;

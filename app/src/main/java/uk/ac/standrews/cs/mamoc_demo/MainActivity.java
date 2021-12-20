@@ -2,13 +2,11 @@ package uk.ac.standrews.cs.mamoc_demo;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Button;
 
-import uk.ac.standrews.cs.mamoc_client.MamocFramework;
 import uk.ac.standrews.cs.mamoc_client.ServiceDiscovery.DiscoveryActivity;
-import uk.ac.standrews.cs.mamoc_demo.Benchmark.BenchmarkActivity;
 import uk.ac.standrews.cs.mamoc_demo.Fibonacci.FibonacciActivity;
 import uk.ac.standrews.cs.mamoc_demo.NQueens.NQueensActivity;
 import uk.ac.standrews.cs.mamoc_demo.SearchText.SearchActivity;

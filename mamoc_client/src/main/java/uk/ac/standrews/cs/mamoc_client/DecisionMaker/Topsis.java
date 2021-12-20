@@ -1,6 +1,5 @@
 package uk.ac.standrews.cs.mamoc_client.DecisionMaker;
 
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import org.apache.commons.math3.ml.distance.EuclideanDistance;
@@ -8,7 +7,6 @@ import org.apache.commons.math3.ml.distance.EuclideanDistance;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import uk.ac.standrews.cs.mamoc_client.Model.MamocNode;

@@ -3,9 +3,10 @@ package uk.ac.standrews.cs.mamoc_client.Execution;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -326,23 +327,23 @@ public class DeploymentController {
 
                     try {
 
-//                         publish the dependent resource file for the task
-                        if (resource_name != null) {
-                            // publish the necessary resource files
-                            CompletableFuture<Publication> pubFuture = node.session.publish(
-                                    SENDING_FILE_PUB,
-                                    "Android",
-                                    resource_name,
-                                    readFromAssets(mContext, resource_name));
-                            pubFuture.thenAccept(publication -> Log.d("publishResult",
-                                    resource_name + " published successfully"));
-                            // Shows we can separate out exception handling
-                            pubFuture.exceptionally(throwable -> {
-                                Log.e(TAG, "Failed to publish resource file");
-                                throwable.printStackTrace();
-                                return null;
-                            });
-                        }
+                        // publish the dependent resource file for the task
+//                        if (resource_name != null) {
+//                            // publish the necessary resource files
+//                            CompletableFuture<Publication> pubFuture = node.session.publish(
+//                                    SENDING_FILE_PUB,
+//                                    "Android",
+//                                    resource_name,
+//                                    readFromAssets(mContext, resource_name));
+//                            pubFuture.thenAccept(publication -> Log.d("publishResult",
+//                                    resource_name + " published successfully"));
+//                            // Shows we can separate out exception handling
+//                            pubFuture.exceptionally(throwable -> {
+//                                Log.e(TAG, "Failed to publish resource file");
+//                                throwable.printStackTrace();
+//                                return null;
+//                            });
+//                        }
 
                         String sourceCode = framework.fetchSourceCode(task.getTaskName());
 
@@ -375,7 +376,7 @@ public class DeploymentController {
                     CompletableFuture<CallResult> callFuture;
 
                     // We will handle the resource name being null in mamoc server to keep the RPC calls standard across different tasks
-                    if (resource_name != null) {
+//                    if (resource_name != null) {
 
                     try {
                         node.session.call(task.getTaskName(), resource_name, params);
@@ -383,17 +384,16 @@ public class DeploymentController {
                         Log.e(TAG, "exception in RPC call: " + e.getMessage());
                         task.setCompleted(false);
                     }
-                    } else {
-                        callFuture = node.session.call(
-                                task.getTaskName(), params);
+//                    } else{
+//                        callFuture = node.session.call(
+//                                task.getTaskName(), params);
 //                    }
 
-                        callFuture.thenAccept(callResult -> {
-                            List<Object> results = (List) callResult.results.get(0);
-
-                            broadcastResults(results);
-                        });
-                    }
+//                    callFuture.thenAccept(callResult -> {
+//                        List<Object> results = (List) callResult.results.get(0);
+//
+//                        broadcastResults(results);
+//                    });
                 }
             });
         } else {
